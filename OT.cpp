@@ -2,8 +2,8 @@
 
 void OT(int my_num, shared_ptr<CommParty> channel)
 {
-    int nOT = 1;
-    int elementSize = 48;
+    int nOT = 2;
+    int elementSize = 3 * 8; // Size in bits
 
     if(my_num == 0)
     {
@@ -25,6 +25,7 @@ void OT(int my_num, shared_ptr<CommParty> channel)
 
         //choice bit.
         sigma[0] = 0;
+        sigma[1] = 1;
 
 
         OTBatchRInput * input = new OTExtensionGeneralRInput(sigma, elementSize);
@@ -36,7 +37,7 @@ void OT(int my_num, shared_ptr<CommParty> channel)
         cout<<outputbytes.size()<<endl;
         for (int i =0 ;i<outputbytes.size();i++)
         {
-            cout<<outputbytes[i];
+            cout <<outputbytes[i] << endl;
         }
     }
 }
