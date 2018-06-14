@@ -11,6 +11,10 @@
 // Length of base OTs
 #define SIZE_OT CONST_k/8
 
+void printN (byte * bytes, int N);
+void printN (vector<byte> bytes);
+
+
 void OT(int my_num, shared_ptr<CommParty> channel);
 
 struct data_t
@@ -72,9 +76,10 @@ public:
         generateKeysOT();
     }
 
+    void run_baseOT(vector<data_t> data0, vector<data_t> data1, size_t nOT);
     void runInitialize();
-
-private:
+//
+//private:
     vector<data_t> keys0_bOT; // Holds the sender's inputs to the OTs
     vector<data_t> keys1_bOT;
 

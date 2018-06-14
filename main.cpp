@@ -13,12 +13,16 @@ int main() {
         // Sender
         auto * party = new SenderOT();
 
-        OT(my_num,party->getChannel());
+//        OT(my_num,party->getChannel());
+        party->run_baseOT(party->keys0_bOT, party->keys1_bOT, 2);
+
+        printN(&(party->keys0_bOT[0].bytes[0]), 32);
+        printN(&(party->keys1_bOT[0].bytes[0]), 32);
 
         /* ------------- Sending and blocking ------------- */
 
-        char message[6] = "hello";
-        party->getChannel().get()->write((byte *)message, 6);
+//        char message[6] = "hello";
+//        party->getChannel().get()->write((byte *)message, 6);
 
     }
 
@@ -29,9 +33,9 @@ int main() {
 
         OT(my_num,party->getChannel());
 
-        byte message_received[6];
-        party->getChannel().get()->read(message_received, 6);
-        cout << string((char *)message_received) << endl;
+//        byte message_received[6];
+//        party->getChannel().get()->read(message_received, 6);
+//        cout << string((char *)message_received) << endl;
     }
 
     else{cout<< "Wrong PartyId"<<endl;}
