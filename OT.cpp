@@ -11,7 +11,7 @@ void OT(int my_num, shared_ptr<CommParty> channel)
         vector<byte> m1{'d','a','n','i','e','l'};
 
         OTExtensionBristolSender sender(12001,true,channel);
-        OTBatchSInput *input = new OTExtensionGeneralSInput(m0,m1,nOT);
+        OTBatchSInput * input = new OTExtensionGeneralSInput(m0,m1,nOT);
 
         auto output = sender.transfer(input);
     }
@@ -35,11 +35,48 @@ void OT(int my_num, shared_ptr<CommParty> channel)
         vector<byte> outputbytes = ((OTOnByteArrayROutput *)output.get())->getXSigma();
 
         cout<<outputbytes.size()<<endl;
-        for (int i =0 ;i<outputbytes.size();i++)
-        {
-            cout << outputbytes[i];
+        for (unsigned char outputbyte : outputbytes) {
+            cout << outputbyte;
         }
         cout << endl;
     }
 }
 
+void PartyOT::setChannel(){
+    if(id == 0)
+    {
+        //sender
+        boost::asio::io_service io_service;
+        SocketPartyData me(IpAddress::from_string("127.0.0.1"), 1212);
+        SocketPartyData other(IpAddress::from_string("127.0.0.1"), 1213);
+        shared_ptr<CommParty> channel = make_shared<CommPartyTCPSynced>(io_service, me, other);
+
+        // connect to party One
+        channel->join(500, 5000);
+        cout << "Connection Established" << endl;
+
+//        /* ------------- Sending and blocking ------------- */
+//
+//        char message[6] = "hello";
+//        channel.get()->write((byte *)message, 6);
+
+        this->channel = channel;
+
+    }
+
+    else if(id == 1) {
+
+        //receiver
+        boost::asio::io_service io_service;
+        SocketPartyData me(IpAddress::from_string("127.0.0.1"), 1213);
+        SocketPartyData other(IpAddress::from_string("127.0.0.1"), 1212);
+        shared_ptr<CommParty> channel = make_shared<CommPartyTCPSynced>(io_service, me, other);
+
+        // connect to party Zero
+        channel->join(500, 5000);
+        cout<<"Connection Established"<<endl;
+
+        this->channel = channel;
+
+    }
+};
