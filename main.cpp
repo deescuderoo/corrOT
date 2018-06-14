@@ -23,8 +23,12 @@ int main() {
         channel->join(500, 5000);
         cout << "Connection Established" << endl;
 
-       OT(my_num,channel);
+        OT(my_num,channel);
 
+        /* ------------- Sending and blocking ------------- */
+
+        char message[6] = "hello";
+        channel.get()->write((byte *)message, 6);
 
     }
 
@@ -42,6 +46,10 @@ int main() {
 
         OT(my_num,channel);
 
+
+        byte message_received[6];
+        channel.get()->read(message_received, 6);
+        cout << string((char *)message_received) << endl;
     }
 
     else{cout<< "Wrong PartyId"<<endl;}

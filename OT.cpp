@@ -37,8 +37,9 @@ void OT(int my_num, shared_ptr<CommParty> channel)
         cout<<outputbytes.size()<<endl;
         for (int i =0 ;i<outputbytes.size();i++)
         {
-            cout <<outputbytes[i] << endl;
+            cout << outputbytes[i];
         }
+        cout << endl;
     }
 }
 
