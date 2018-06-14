@@ -11,7 +11,7 @@ int main() {
     if(my_num == 0)
     {
         // Sender
-        PartyOT * party = new PartyOT(0);
+        auto * party = new SenderOT();
 
         OT(my_num,party->getChannel());
 
@@ -25,7 +25,7 @@ int main() {
     else if(my_num == 1) {
 
         // Receiver
-        PartyOT * party = new PartyOT(1);
+        auto * party = new ReceiverOT();
 
         OT(my_num,party->getChannel());
 
@@ -35,7 +35,4 @@ int main() {
     }
 
     else{cout<< "Wrong PartyId"<<endl;}
-
-
-
 }

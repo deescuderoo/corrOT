@@ -24,7 +24,24 @@ public:
     void setChannel();
     shared_ptr<CommParty> getChannel() { return channel; }
 
-
 //    byte * p = prg->getPRGBytesEX(sizeof(data256));
 //    memcpy(iotape[m_partyId].bytes, p, sizeof(data256));
+};
+
+class SenderOT : public PartyOT{
+public:
+    SenderOT() : PartyOT(0) {}
+
+    void runInitialize();
+
+private:
+
+};
+
+class ReceiverOT : public PartyOT{
+public:
+    ReceiverOT() : PartyOT(1) {}
+
+private:
+
 };

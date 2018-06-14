@@ -55,11 +55,6 @@ void PartyOT::setChannel(){
         channel->join(500, 5000);
         cout << "Connection Established" << endl;
 
-//        /* ------------- Sending and blocking ------------- */
-//
-//        char message[6] = "hello";
-//        channel.get()->write((byte *)message, 6);
-
         this->channel = channel;
 
     }
