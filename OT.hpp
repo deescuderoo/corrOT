@@ -13,6 +13,7 @@
 
 void printN (byte * bytes, int N);
 void printN (vector<byte> & bytes);
+vector<vector<byte>> vectorConversion(vector<byte> & input, int nrows, int ncols);
 
 
 void OT(int my_num, shared_ptr<CommParty> channel);
@@ -34,27 +35,24 @@ class PartyOT {
 private:
     int id;
     shared_ptr<CommParty> channel;  // Channel between this party to every other party in the protocol.
-    void setChannel();
+    void createChannel();
 
 public:
     PartyOT(int id)
-            : id(id), prg0(new PrgFromOpenSSLAES()), prg1(new PrgFromOpenSSLAES()) {
+            : id(id), prg(new PrgFromOpenSSLAES()) {
         // Sets the channel
-        setChannel();
+        createChannel();
 
-        SecretKey secretKey0 = prg0->generateKey(256); // Sets the key for the PRG
-        prg0->setKey(secretKey0);
-        SecretKey secretKey1 = prg1->generateKey(256); // Sets the key for the PRG
-        prg1->setKey(secretKey1);
+        SecretKey secretKey0 = prg->generateKey(256); // Sets the key for the PRG
+        prg->setKey(secretKey0);
     }
 
     int getID() { return id; }
-
     shared_ptr<CommParty> getChannel() { return channel; }
+    virtual void runInitialize() = 0;
 
 protected:
-    PrgFromOpenSSLAES * prg0;
-    PrgFromOpenSSLAES * prg1;
+    PrgFromOpenSSLAES * prg;
 };
 
 class ReceiverOT : public PartyOT{
@@ -64,12 +62,12 @@ public:
     }
 
     vector<byte> choice_bits;// Holds the receiver's choice bits for the OTs
-    void run_baseOT(vector<byte> sigma, size_t nOT, size_t elementSize);
-    void runInitialize();
+    void run_baseOT(vector<byte> sigma, int nOT, int elementSize);
+    void runInitialize() override;
 
 //private:
 
-    vector<data_t> keys_bOT;
+    vector<vector<byte>> keys_bOT;
 
     void generateChoiceBitsOT();
 
@@ -77,16 +75,12 @@ public:
 
 class SenderOT : public PartyOT{
 public:
-    SenderOT() : PartyOT(0), keys0_bOT(CONST_k), keys1_bOT(CONST_k) {
-        generateKeysOT();
-    }
+    SenderOT() : PartyOT(0), keys0_bOT(CONST_k, vector<byte>(SIZE_OT)), keys1_bOT(CONST_k, vector<byte>(SIZE_OT)) {}
 
-    void run_baseOT(vector<data_t> data0, vector<data_t> data1, size_t nOT);
-    void runInitialize();
-//
+    void run_baseOT(vector<vector<byte>> data0, vector<vector<byte>> data1, int nOT, int elementSizeBits);
+    void runInitialize() override;
+    //
 //private:
-    vector<data_t> keys0_bOT; // Holds the sender's inputs to the OTs
-    vector<data_t> keys1_bOT;
-
-    void generateKeysOT();
+    vector<vector<byte>> keys0_bOT; // Holds the sender's inputs to the OTs
+    vector<vector<byte>> keys1_bOT;
 };
