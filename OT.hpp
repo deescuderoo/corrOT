@@ -59,12 +59,17 @@ protected:
 
 class ReceiverOT : public PartyOT{
 public:
-    ReceiverOT() : PartyOT(1) {}
+    ReceiverOT() : PartyOT(1), choice_bits(CONST_k) {
+        generateChoiceBitsOT();
+    }
 
+    vector<byte> choice_bits;// Holds the receiver's choice bits for the OTs
+    void run_baseOT(vector<byte> sigma, size_t nOT, size_t elementSize);
     void runInitialize();
 
-private:
-    vector<data_t> choice_bits; // Holds the receiver's choice bits for the OTs
+//private:
+
+    vector<data_t> keys_bOT;
 
     void generateChoiceBitsOT();
 

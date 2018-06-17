@@ -12,7 +12,7 @@ int main() {
     {
         // Sender
         auto * party = new SenderOT();
-        party->run_baseOT(party->keys0_bOT, party->keys1_bOT, 2);
+        party->run_baseOT(party->keys0_bOT, party->keys1_bOT, CONST_k);
 
         /* ------------- Sending and blocking ------------- */
 
@@ -25,7 +25,7 @@ int main() {
 
         // Receiver
         auto * party = new ReceiverOT();
-
+        party->generateChoiceBitsOT();
         OT(my_num,party->getChannel());
 
 //        byte message_received[6];

@@ -105,7 +105,24 @@ void SenderOT::run_baseOT(vector<data_t> data0, vector<data_t> data1, size_t nOT
 
 }
 
+void ReceiverOT::generateChoiceBitsOT() {
+    size_t size = choice_bits.size();
+    memcpy(&choice_bits[0], prg0->getPRGBytesEX(size), size);
+    for (int i = 0; i < choice_bits.size(); i++){
+        choice_bits[i] %= 2; // Project byte to bit
+//        cout << (int)choice_bits[i] << endl;
+    }
+}
+
+//void ReceiverOT::run_baseOT(vector<byte> sigma, size_t nOT, size_t elementSizeBits) {
+//    OTExtensionBristolReceiver receiver("localhost", 12001, true, this->getChannel());
+//    OTBatchRInput * input = new OTExtensionGeneralRInput(sigma, elementSizeBits);
+//
+//    auto output = receiver.transfer(input);
+//
+//    keys_bOT = ((OTOnByteArrayROutput *)output.get())->getXSigma();
+//}
+
 void ReceiverOT::runInitialize() {
 
 }
-
