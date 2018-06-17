@@ -12,7 +12,7 @@
 #define SIZE_OT CONST_k/8
 
 void printN (byte * bytes, int N);
-void printN (vector<byte> bytes);
+void printN (vector<byte> & bytes);
 
 
 void OT(int my_num, shared_ptr<CommParty> channel);

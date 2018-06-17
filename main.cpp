@@ -12,12 +12,7 @@ int main() {
     {
         // Sender
         auto * party = new SenderOT();
-
-//        OT(my_num,party->getChannel());
         party->run_baseOT(party->keys0_bOT, party->keys1_bOT, 2);
-
-        printN(&(party->keys0_bOT[0].bytes[0]), 32);
-        printN(&(party->keys1_bOT[0].bytes[0]), 32);
 
         /* ------------- Sending and blocking ------------- */
 
