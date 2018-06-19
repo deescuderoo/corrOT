@@ -46,6 +46,7 @@ class vZ2k {
 public:
     // Constructors
     vZ2k() : m_data(vector<Z2k<T, pwr>>()), size(uint()){};
+    vZ2k(int size) : m_data(vector<Z2k<T, pwr>>(size)), size(size){};
     vZ2k(vector<Z2k<T, pwr>> data) : m_data(data), size(data.size()){
         assert (sizeof(T) == pwr/8);
     };

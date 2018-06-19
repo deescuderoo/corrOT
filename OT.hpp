@@ -1,24 +1,7 @@
-#include <iostream>
-#include <libscapi/include/interactive_mid_protocols/OTExtensionBristol.hpp>
-#include <libscapi/include/primitives/Prg.hpp>
+#include "Tools.hpp"
+#include "IntMod.hpp"
 
-// Number of OTs
-#define CONST_k 128
-// Length for the correlated OTs
-#define CONST_n 1000
-// Length of masking correlated vector
-#define CONST_k_ 1
-// Length of base OTs
-#define SIZE_OT CONST_k/8
-
-void printN (byte * bytes, int N);
-void printN (vector<byte> & bytes);
-vector<vector<byte>> vectorConversion(vector<byte> & input, int nrows, int ncols);
-
-
-void OT(int my_num, shared_ptr<CommParty> channel);
-
-struct data_t
+/*struct data_t
 {
     data_t(string s){
         memset(bytes,0,sizeof(data_t));
@@ -29,7 +12,7 @@ struct data_t
     data_t(){
         memset(bytes,0,sizeof(data_t));
     }
-};
+};*/
 
 class PartyOT {
 private:
@@ -50,7 +33,7 @@ public:
     int getID() { return id; }
     shared_ptr<CommParty> getChannel() { return channel; }
     virtual void runInitialize() = 0;
-    virtual void runCreateCorrelation() = 0;
+//    virtual void runCreateCorrelation() = 0;
 
 protected:
     PrgFromOpenSSLAES * prg;
@@ -74,18 +57,23 @@ public:
 
 };
 
+template<class T, int pwr>
 class SenderOT : public PartyOT{
 public:
-    SenderOT() : PartyOT(0), keys0_bOT(CONST_k, vector<byte>(SIZE_OT)), keys1_bOT(CONST_k, vector<byte>(SIZE_OT)) {}
+    SenderOT() : PartyOT(0), keys0_bOT(CONST_k, vector<byte>(SIZE_OT)), keys1_bOT(CONST_k, vector<byte>(SIZE_OT)),
+                 correlation(CONST_n + CONST_k_), t0(CONST_k,vZ2k<T,pwr>(CONST_n + CONST_k_)), t1(CONST_k,vZ2k<T,pwr>(CONST_n + CONST_k_)) {}
 
     void run_baseOT(vector<vector<byte>> data0, vector<vector<byte>> data1, int nOT, int elementSizeBits);
-    template<class T, int pwr>
     void sampleCorrelation(int length);
-
+    void applyPRF();
     void runInitialize() override;
     //
 //private:
     vector<vector<byte>> keys0_bOT; // Holds the sender's inputs to the OTs
     vector<vector<byte>> keys1_bOT;
-
+    vZ2k<T,pwr> correlation;
+    vector<vZ2k<T,pwr>> t0;
+    vector<vZ2k<T,pwr>> t1;
 };
+
+#include "OT.tpp" // Implementations of template methods must be in the header file

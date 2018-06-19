@@ -16,8 +16,15 @@ int main() {
     if(my_num == 0)
     {
         // Sender
-        auto * party = new SenderOT();
+        auto * party = new SenderOT<CONST_T,CONST_pwr>();
 //        party->runInitialize();
+        party->sampleCorrelation(CONST_n);
+        for (int i = 0; i < CONST_n; i++){
+            cout << party->correlation.m_data[i].m_data << endl;
+        }
+
+        cout << "PRF" << endl;
+        prfCall0();
 
 // ------------- Sending and blocking -------------
 
@@ -42,7 +49,7 @@ int main() {
     /// TESTS
 
     // Test numbers
-    int a = 10;
+/*    int a = 10;
     int b = 20;
     auto number1 = new Z2k<int, 32>(a);
     auto number2 = new Z2k<int, 32>(b);
@@ -75,7 +82,7 @@ int main() {
     vector<byte> bytes2 = {0x01,0x00,0x00,0x00};
     vector<vector<byte>> vecvec = {bytes,bytes2};
     auto vec4 = new vZ2k<int, 32>(vecvec);
-    cout << "Vec4: " << vec4->m_data[0].m_data << " " << vec4->m_data[1].m_data << endl;
+    cout << "Vec4: " << vec4->m_data[0].m_data << " " << vec4->m_data[1].m_data << endl;*/
 
 
 }
