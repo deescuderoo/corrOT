@@ -123,3 +123,8 @@ void ReceiverOT::runInitialize() {
 void SenderOT::runInitialize() {
     run_baseOT(keys0_bOT, keys1_bOT, CONST_k, CONST_k);
 }
+
+template<class T, int pwr>
+void SenderOT::sampleCorrelation(int length) {
+
+}

@@ -50,6 +50,7 @@ public:
     int getID() { return id; }
     shared_ptr<CommParty> getChannel() { return channel; }
     virtual void runInitialize() = 0;
+    virtual void runCreateCorrelation() = 0;
 
 protected:
     PrgFromOpenSSLAES * prg;
@@ -78,9 +79,13 @@ public:
     SenderOT() : PartyOT(0), keys0_bOT(CONST_k, vector<byte>(SIZE_OT)), keys1_bOT(CONST_k, vector<byte>(SIZE_OT)) {}
 
     void run_baseOT(vector<vector<byte>> data0, vector<vector<byte>> data1, int nOT, int elementSizeBits);
+    template<class T, int pwr>
+    void sampleCorrelation(int length);
+
     void runInitialize() override;
     //
 //private:
     vector<vector<byte>> keys0_bOT; // Holds the sender's inputs to the OTs
     vector<vector<byte>> keys1_bOT;
+
 };
