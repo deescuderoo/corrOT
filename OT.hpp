@@ -33,7 +33,7 @@ public:
     int getID() { return id; }
     shared_ptr<CommParty> getChannel() { return channel; }
     virtual void runInitialize() = 0;
-//    virtual void runCreateCorrelation() = 0;
+    virtual void runCreateCorrelation() = 0;
 
 protected:
     PrgFromOpenSSLAES * prg;
@@ -50,8 +50,9 @@ public:
     vector<byte> choice_bits;// Holds the receiver's choice bits for the OTs
     void run_baseOT(vector<byte> sigma, int nOT, int elementSize);
     void runInitialize() override;
+    void runCreateCorrelation() override;
 
-//private:
+    //private:
 
     vector<vector<byte>> keys_bOT;
 
@@ -65,10 +66,9 @@ public:
     SenderOT() : PartyOT(0), keys0_bOT(CONST_k, vector<byte>(SIZE_OT)), keys1_bOT(CONST_k, vector<byte>(SIZE_OT)),
                  correlation(CONST_n + CONST_k_), t0(CONST_k,vZ2k<T,pwr>(CONST_n + CONST_k_)), t1(CONST_k,vZ2k<T,pwr>(CONST_n + CONST_k_)) {}
 
-    void run_baseOT(vector<vector<byte>> data0, vector<vector<byte>> data1, int nOT, int elementSizeBits);
-    void sampleCorrelation(int length);
-    void applyPRF();
     void runInitialize() override;
+    void runCreateCorrelation() override;
+
     //
 //private:
     vector<vector<byte>> keys0_bOT; // Holds the sender's inputs to the OTs
@@ -76,6 +76,12 @@ public:
     vZ2k<T,pwr> correlation;
     vector<vZ2k<T,pwr>> t0;
     vector<vZ2k<T,pwr>> t1;
+
+private:
+    void run_baseOT(vector<vector<byte>> data0, vector<vector<byte>> data1, int nOT, int elementSizeBits);
+    void sampleCorrelation();
+    void applyPRF();
+    void sendUi();
 };
 
 #include "OT.tpp" // Implementations of template methods must be in the header file

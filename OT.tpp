@@ -32,7 +32,8 @@ void SenderOT<T,pwr>::runInitialize() {
 }
 
 template<class T, int pwr>
-void SenderOT<T,pwr>::sampleCorrelation(int length) {
+void SenderOT<T,pwr>::sampleCorrelation() {
+    int length = CONST_n + CONST_k_;
     int size = (pwr * length)/8;
     vector<byte> buffer(size);
     memcpy(&buffer[0], prg->getPRGBytesEX(size), size);
@@ -58,3 +59,22 @@ void SenderOT<T,pwr>::applyPRF() {
         t1[i] = vZ2k<T,pwr>(vectorConversion(tmp1, CONST_n + CONST_k_, pwr/8));
     }
 };
+
+template<class T, int pwr>
+void SenderOT<T,pwr>::sendUi() {
+    for (int i = 0; i < CONST_k; i++){
+        assert(correlation.getLength() == t0[0].getLength());
+        assert(correlation.getLength() == t1[0].getLength());
+
+        byte * ptr = (t0[i] + t1[i] + correlation).getBytePtr();
+        int length = sizeof(Z2k<T,pwr>) * t0[i].getLength();
+        getChannel()->write(ptr, length);
+    }
+};
+
+template<class T, int pwr>
+void SenderOT<T,pwr>::runCreateCorrelation() {
+    this->sampleCorrelation();
+    this->applyPRF();
+    this->sendUi();
+}

@@ -46,12 +46,12 @@ template <class T, int pwr>
 class vZ2k {
 public:
     // Constructors
-    vZ2k() : m_data(vector<Z2k<T, pwr>>()), size(uint()){};
-    vZ2k(int size) : m_data(vector<Z2k<T, pwr>>(size)), size(size){};
-    vZ2k(vector<Z2k<T, pwr>> data) : m_data(data), size(data.size()){
+    vZ2k() : m_data(vector<Z2k<T, pwr>>()){};
+    vZ2k(int size) : m_data(vector<Z2k<T, pwr>>(size)){};
+    vZ2k(vector<Z2k<T, pwr>> data) : m_data(data){
         assert (sizeof(T) == pwr/8);
     };
-    vZ2k(vector<vector<byte>> data) : m_data(vector<Z2k<T, pwr>>(data.size())), size(data.size()){
+    vZ2k(vector<vector<byte>> data) : m_data(vector<Z2k<T, pwr>>(data.size())){
         for (int i = 0; i < data.size(); i++){
             m_data[i] = Z2k<T,pwr>(data[i]);
         }
@@ -59,11 +59,21 @@ public:
 
     // Attributes
     vector<Z2k<T, pwr>> m_data;
-    unsigned long size;
 
     // Operators
     vZ2k operator+(vZ2k rhs); //TODO: Write a space-saving addition
     vZ2k operator-(vZ2k rhs);
+
+    // Methods;
+    vector<Z2k<T, pwr>> getVector() {
+        return m_data;
+    };
+    byte * getBytePtr() {
+        return (byte *)&(m_data[0].m_data);
+    };
+    unsigned int getLength() {
+        return m_data.size();
+    };
 
     // Factory
 //    static vZ2k CreateFromRandom();
@@ -96,9 +106,9 @@ Z2k<T, pwr> Z2k<T, pwr>::operator*(Z2k<T, pwr> rhs) {
 
 template<class T, int pwr>
 vZ2k<T, pwr> vZ2k<T, pwr>::operator+(vZ2k<T, pwr> rhs) {
-    assert(this->size == rhs.size);
-    vector<Z2k<T, pwr>> result(this->size);
-    for (int i = 0; i < this->size; i++){
+    assert(this->getLength() == rhs.getLength());
+    vector<Z2k<T, pwr>> result(this->getLength());
+    for (int i = 0; i < this->getLength(); i++){
         result[i] = this->m_data[i] + rhs.m_data[i];
     }
     return result;
@@ -106,9 +116,9 @@ vZ2k<T, pwr> vZ2k<T, pwr>::operator+(vZ2k<T, pwr> rhs) {
 
 template<class T, int pwr>
 vZ2k<T, pwr> vZ2k<T, pwr>::operator-(vZ2k<T, pwr> rhs) {
-    assert(this->size == rhs.size);
-    vector<Z2k<T, pwr>> result(this->size);
-    for (int i = 0; i < this->size; i++){
+    assert(this->getLength() == rhs.getLength());
+    vector<Z2k<T, pwr>> result(this->getLength());
+    for (int i = 0; i < this->getLength(); i++){
         result[i] = this->m_data[i] - rhs.m_data[i];
     }
     return result;

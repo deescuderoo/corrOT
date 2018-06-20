@@ -9,24 +9,23 @@ int main() {
 
     int my_num = stoi(partyNum);
 
-
-
-
-
     if(my_num == 0)
     {
         // Sender
         auto * party = new SenderOT<CONST_T,CONST_pwr>();
         party->runInitialize();
-        party->sampleCorrelation(CONST_n + CONST_k_);
-        party->applyPRF();
+        party->runCreateCorrelation();
+
+        assert (sizeof(Z2k<CONST_T,CONST_pwr>) == sizeof(CONST_T));
+
 /*        for (int i = 0; i < CONST_n + CONST_k_; i++){
 //            cout << party->correlation.m_data[i].m_data << endl;
             cout << party->t0[0].m_data[i].m_data << endl;
         }*/
-        vZ2k<CONST_T, CONST_pwr> subtraction = party->t0[0] - party->t1[0];
-        for (int i = 0; i < subtraction.m_data.size(); i++)
-        cout << subtraction.m_data[i].m_data << endl;
+
+//        vZ2k<CONST_T, CONST_pwr> subtraction = party->t0[0] - party->t1[0];
+//        for (int i = 0; i < subtraction.m_data.size(); i++)
+//        cout << subtraction.m_data[i].m_data << endl;
 
 //        cout << "PRF" << endl;
 //        prfCall0();

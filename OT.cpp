@@ -66,3 +66,7 @@ void ReceiverOT::run_baseOT(vector<byte> sigma, int nOT, int elementSizeBits) {
 void ReceiverOT::runInitialize() {
     run_baseOT(choice_bits, CONST_k, CONST_k);
 }
+
+void ReceiverOT::runCreateCorrelation() {
+
+}
