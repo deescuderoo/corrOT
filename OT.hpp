@@ -22,7 +22,7 @@ private:
 
 public:
     PartyOT(int id)
-            : id(id), prg(new PrgFromOpenSSLAES()), prf(new OpenSSLAES()) {
+            : id(id), prg(new PrgFromOpenSSLAES()), prf(new OpenSSLAES()), hash(new SHA256_CTX) {
         // Sets the channel
         createChannel();
 
@@ -34,10 +34,13 @@ public:
     shared_ptr<CommParty> getChannel() { return channel; }
     virtual void runInitialize() = 0;
     virtual void runCreateCorrelation() = 0;
+    virtual void runConsistencyCheck() = 0;
+
 
 protected:
     PrgFromOpenSSLAES * prg;
     PseudorandomFunction * prf;
+    SHA256_CTX * hash;
 
 };
 
@@ -53,6 +56,8 @@ public:
     void run_baseOT(vector<byte> sigma, int nOT, int elementSize);
     void runInitialize() override;
     void runCreateCorrelation() override;
+    void runConsistencyCheck() override;
+
 
     //private:
 
@@ -61,21 +66,32 @@ public:
     vector<vZ2k<T,pwr>> ui;
     vector<vZ2k<T,pwr>> ai;
 
+    byte h00[hashOutput * CONST_k * CONST_k];
+    byte h01[hashOutput * CONST_k * CONST_k];
+    byte h10[hashOutput * CONST_k * CONST_k];
+    byte h11[hashOutput * CONST_k * CONST_k];
+
     void generateChoiceBitsOT();
     void applyPRF();
     void receiveUi();
     void computeAi();
-
+    void receiveHashes();
+    void checkHashes();
 };
 
 template<class T, int pwr>
 class SenderOT : public PartyOT{
 public:
     SenderOT() : PartyOT(0), keys0_bOT(CONST_k, vector<byte>(SIZE_OT)), keys1_bOT(CONST_k, vector<byte>(SIZE_OT)),
-                 correlation(CONST_n + CONST_k_), t0(CONST_k,vZ2k<T,pwr>(CONST_n + CONST_k_)), t1(CONST_k,vZ2k<T,pwr>(CONST_n + CONST_k_)) {}
+                 correlation(CONST_n + CONST_k_), t0(CONST_k,vZ2k<T,pwr>(CONST_n + CONST_k_)), t1(CONST_k,vZ2k<T,pwr>(CONST_n + CONST_k_))
+    /*             ,h00(CONST_k * CONST_k, vector<byte>(hashOutput)), h01(CONST_k * CONST_k, vector<byte>(hashOutput)),
+                 h10(CONST_k * CONST_k, vector<byte>(hashOutput)), h11(CONST_k * CONST_k, vector<byte>(hashOutput))
+    */{}
 
     void runInitialize() override;
     void runCreateCorrelation() override;
+    void runConsistencyCheck() override;
+
 
     //
 //private:
@@ -85,11 +101,18 @@ public:
     vector<vZ2k<T,pwr>> t0;
     vector<vZ2k<T,pwr>> t1;
 
+    byte h00[hashOutput * CONST_k * CONST_k];
+    byte h01[hashOutput * CONST_k * CONST_k];
+    byte h10[hashOutput * CONST_k * CONST_k];
+    byte h11[hashOutput * CONST_k * CONST_k];
+
 private:
     void run_baseOT(vector<vector<byte>> data0, vector<vector<byte>> data1, int nOT, int elementSizeBits);
     void sampleCorrelation();
     void applyPRF();
     void sendUi();
+    void generateHashes();
+    void sendHashes();
 };
 
 #include "Sender.tpp" // Implementations of template methods must be in the header file

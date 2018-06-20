@@ -88,3 +88,18 @@ void prfCall(PseudorandomFunction *prf, vector<byte> &key, vector<byte> &output,
         cout<<hex<<(int)output[i];
     cout<<endl;*/
 }
+
+void Hash_value(SHA256_CTX * hashAlgorithm, byte* in, byte * digest, int inSize){
+    SHA256_Init(hashAlgorithm);
+    SHA256_Update(hashAlgorithm, in, inSize);
+    SHA256_Final(digest, hashAlgorithm);
+
+
+//    cout<<"--------------------------------Hash------------------\n";
+//    for(int i = 0; i<32; i++) {
+//        cout << hex;
+//        cout << (int) digest[i];
+//    }
+//    cout << dec;
+//    cout << endl;
+}

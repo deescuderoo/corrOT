@@ -16,6 +16,7 @@ int main() {
         auto * party = new SenderOT<CONST_T,CONST_pwr>();
         party->runInitialize();
         party->runCreateCorrelation();
+        party->runConsistencyCheck();
 
         /*cout << "\n" << "Vector" << endl;
         vZ2k<CONST_T, CONST_pwr>::printVector((party->t0)[1] + (party->t1)[1] + party->correlation);*/
@@ -47,6 +48,8 @@ int main() {
         auto * party = new ReceiverOT<CONST_T,CONST_pwr>();
         party->runInitialize();
         party->runCreateCorrelation();
+        party->runConsistencyCheck();
+
 
         /*cout << "\n" << "Vector" << endl;
         vZ2k<CONST_T, CONST_pwr>::printVector(party->ui[1]);*/
@@ -54,6 +57,7 @@ int main() {
 
     else{cout<< "Wrong PartyId"<<endl;}
 
+    cout << "END" << endl;
 
 
     /// TESTS

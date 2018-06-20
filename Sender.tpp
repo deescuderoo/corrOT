@@ -74,6 +74,53 @@ void SenderOT<T,pwr>::sendUi() {
 };
 
 template<class T, int pwr>
+void SenderOT<T,pwr>::generateHashes() {
+    int size = t0[0].getLength() * sizeof(Z2k<T,pwr>);
+    for (int alpha = 0; alpha < CONST_k; alpha++){
+        for (int beta = 0; beta < CONST_k; beta++){
+            Hash_value(hash, (t0[alpha] - t0[beta]).getBytePtr(), h00 + hashOutput*(beta + alpha*CONST_k), size);
+            Hash_value(hash, (t0[alpha] - t1[beta]).getBytePtr(), h01 + hashOutput*(beta + alpha*CONST_k), size);
+            Hash_value(hash, (t1[alpha] - t0[beta]).getBytePtr(), h10 + hashOutput*(beta + alpha*CONST_k), size);
+            Hash_value(hash, (t1[alpha] - t1[beta]).getBytePtr(), h11 + hashOutput*(beta + alpha*CONST_k), size);
+
+
+
+//            printN(h00 + hashOutput*(beta + alpha*CONST_k), 32);
+//            printf("%p\n", (void*)h00);
+        }
+    }
+    /*cout << "---------------- 00 ----------------" << endl;
+    vZ2k<T,pwr>::printVector(t0[0] - t0[1]);
+    cout << "---------------- 01 ----------------" << endl;
+    vZ2k<T,pwr>::printVector(t0[0] - t1[1]);
+    cout << "---------------- 10 ----------------" << endl;
+    vZ2k<T,pwr>::printVector(t1[0] - t0[1]);
+    cout << "---------------- 11 ----------------" << endl;
+    vZ2k<T,pwr>::printVector(t1[0] - t1[1]);*/
+}
+
+template<class T, int pwr>
+void SenderOT<T,pwr>::sendHashes() {
+    int length = hashOutput * CONST_k * CONST_k;
+//    int length = 32;
+//    printf("%p\n", (void*)h00);
+//    printN(h00, length);
+    getChannel()->write(h00, length);
+    getChannel()->write(h01, length);
+    getChannel()->write(h10, length);
+    getChannel()->write(h11, length);
+//    cout << "SEND FINISHED" << endl;
+
+
+//    printN(h00, length);
+//    printf("%p\n", (void*)h00);
+//    getChannel()->write(h01, length);
+    /*getChannel()->write(h10, length);
+    getChannel()->write(h11, length);*/
+
+};
+
+template<class T, int pwr>
 void SenderOT<T,pwr>::runCreateCorrelation() {
     sampleCorrelation();
     applyPRF();
@@ -83,4 +130,10 @@ void SenderOT<T,pwr>::runCreateCorrelation() {
     vZ2k<T,pwr>::printVector(t0[0]);
     cout << "\n--------SENDER s0 = 1--------" << endl;
     vZ2k<T,pwr>::printVector(t0[0] + correlation);*/
+}
+
+template<class T, int pwr>
+void SenderOT<T,pwr>::runConsistencyCheck() {
+    generateHashes();
+    sendHashes();
 }

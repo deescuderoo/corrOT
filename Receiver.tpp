@@ -53,11 +53,65 @@ void ReceiverOT<T,pwr>::receiveUi() {
 template<class T, int pwr>
 void ReceiverOT<T,pwr>::computeAi() {
     for (int i = 0; i < CONST_k; i++) {
-        if (choice_bits[i]){
+        if (choice_bits[i] == 1){
             // bit = 1
             ai[i] = ui[i] - t[i];
         } else {
             ai[i] = t[i];
+        }
+    }
+}
+
+template<class T, int pwr>
+void ReceiverOT<T,pwr>::receiveHashes() {
+    int length = hashOutput * CONST_k * CONST_k;
+    getChannel()->read(h00, length);
+    getChannel()->read(h01, length);
+    getChannel()->read(h10, length);
+    getChannel()->read(h11, length);
+}
+
+template<class T, int pwr>
+void ReceiverOT<T,pwr>::checkHashes() {
+    int size = t[0].getLength() * sizeof(Z2k<T,pwr>);;
+    byte tmpBuffer[hashOutput];
+
+//    cout << "choicebits " << (int)choice_bits[0] << (int)choice_bits[1] << endl;
+//    vZ2k<T,pwr>::printVector(t[0] - t[1]);
+
+    for (int alpha = 0; alpha < CONST_k; alpha++){
+        for (int beta = 0; beta < CONST_k; beta++){
+            if (choice_bits[alpha] == 0 && choice_bits[beta] == 0){
+                Hash_value(hash, (t[alpha] - t[beta]).getBytePtr(), tmpBuffer, size);
+                if (memcmp(tmpBuffer, h00 + hashOutput*(beta + alpha*CONST_k), hashOutput)){
+                    cout << "I COMPLAIN!!" << endl;
+                    assert(false);
+                }
+            } else
+            if (choice_bits[alpha] == 0 && choice_bits[beta] == 1){
+                Hash_value(hash, (t[alpha] - t[beta]).getBytePtr(), tmpBuffer, size);
+                if (memcmp (tmpBuffer, h01 + hashOutput*(beta + alpha*CONST_k), hashOutput)){
+                    cout << "I COMPLAIN!!" << endl;
+                    assert(false);
+                }
+            } else
+            if (choice_bits[alpha] == 1 && choice_bits[beta] == 0){
+                Hash_value(hash, (t[alpha] - t[beta]).getBytePtr(), tmpBuffer, size);
+                if (memcmp (tmpBuffer, h10 + hashOutput*(beta + alpha*CONST_k), hashOutput)){
+                    cout << "I COMPLAIN!!" << endl;
+                    assert(false);
+                }
+            } else
+            if (choice_bits[alpha] == 1 && choice_bits[beta] == 1){
+                Hash_value(hash, (t[alpha] - t[beta]).getBytePtr(), tmpBuffer, size);
+                if (memcmp (tmpBuffer, h11 + hashOutput*(beta + alpha*CONST_k), hashOutput)){
+                    cout << "I COMPLAIN!!" << endl;
+                    assert(false);
+                }
+            }
+
+//            printN(h00 + hashOutput*(beta + alpha*CONST_k), 32);
+//            printf("%p\n", (void*)h00);
         }
     }
 }
@@ -75,4 +129,10 @@ void ReceiverOT<T,pwr>::runCreateCorrelation() {
 
     /*cout << "\n--------RECEIVER s0 = " << (int)choice_bits[0] << " --------" << endl;
     vZ2k<T,pwr>::printVector(ai[0]);*/
+}
+
+template<class T, int pwr>
+void ReceiverOT<T,pwr>::runConsistencyCheck() {
+    receiveHashes();
+    checkHashes();
 }
