@@ -1,4 +1,4 @@
-#include "OT.hpp"
+#include "Sender.hpp"
 #include "IntMod.hpp"
 
 int main() {
@@ -41,7 +41,7 @@ int main() {
     else if(my_num == 1) {
 
         // Receiver
-        auto * party = new ReceiverOT();
+        auto * party = new ReceiverOT<CONST_T,CONST_pwr>();
         party->runInitialize();
 
     }

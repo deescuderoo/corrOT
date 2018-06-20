@@ -41,9 +41,10 @@ protected:
 
 };
 
+template<class T, int pwr>
 class ReceiverOT : public PartyOT{
 public:
-    ReceiverOT() : PartyOT(1), choice_bits(CONST_k) {
+    ReceiverOT() : PartyOT(1), choice_bits(CONST_k), ui(CONST_k,vZ2k<T,pwr>(CONST_n + CONST_k_)) {
         generateChoiceBitsOT();
     }
 
@@ -55,6 +56,7 @@ public:
     //private:
 
     vector<vector<byte>> keys_bOT;
+    vector<vZ2k<T,pwr>> ui;
 
     void generateChoiceBitsOT();
 
@@ -84,4 +86,5 @@ private:
     void sendUi();
 };
 
-#include "OT.tpp" // Implementations of template methods must be in the header file
+#include "Sender.tpp" // Implementations of template methods must be in the header file
+#include "Receiver.tpp" // Implementations of template methods must be in the header file
