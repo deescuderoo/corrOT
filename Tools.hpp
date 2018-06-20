@@ -31,8 +31,6 @@ vector<vector<byte>> vectorConversion(vector<byte> & input, int nrows, int ncols
 
 vector<byte> inToBytes(int paramInt);
 void prfCall(PseudorandomFunction *prf, vector<byte> &key, vector<byte> &output, int outputBytesLength);
-void runPRF(vector<vector<byte>> &keys0, vector<vector<byte>> &keys1, vector<vector<byte>> &T0, vector<vector<byte>> &T1);
-
 
 
 #endif //OT1_TOOLS_HPP

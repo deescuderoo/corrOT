@@ -9,6 +9,9 @@
 #include <libscapi/include/interactive_mid_protocols/OTExtensionBristol.hpp>
 #include <libscapi/include/primitives/Prg.hpp>
 
+template <class T, int pwr>
+class vZ2k;
+
 /// Holds a class for computation modulo powers of 2
 /// The current supported modulus are 2^32, 2^64 and 2^128
 template <class T, int pwr>
@@ -39,7 +42,7 @@ public:
     Z2k operator+(Z2k rhs);
     Z2k operator-(Z2k rhs);
     Z2k operator*(Z2k rhs);
-//    Z2k operator*(vZ2k rhs);
+    Z2k operator*(vZ2k<T,pwr> rhs);
     };
 
 template <class T, int pwr>
@@ -61,8 +64,15 @@ public:
     vector<Z2k<T, pwr>> m_data;
 
     // Operators
-    vZ2k operator+(vZ2k rhs); //TODO: Write a space-saving addition
+    vZ2k operator+(vZ2k rhs); //TODO: Write space-saving operations
     vZ2k operator-(vZ2k rhs);
+//    vZ2k operator*(Z2k rhs);
+
+
+    //
+//    vZ2k & operator*(Z2k lhs, vZ2k& rhs);
+//    vZ2k operator*(vZ2k& lhs, Z2k rhs);
+    //
 
     // Methods;
     vector<Z2k<T, pwr>> getVector() {
@@ -75,7 +85,7 @@ public:
         return m_data.size();
     };
 
-    static void printVectorGroup (vZ2k<T,pwr> vect) {
+    static void printVector(vZ2k<T, pwr> vect) {
         for (int i = 0; i < vect.m_data.size(); i++) {
             cout << vect.m_data[i].m_data << endl;
         }

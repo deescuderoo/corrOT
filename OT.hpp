@@ -44,7 +44,8 @@ protected:
 template<class T, int pwr>
 class ReceiverOT : public PartyOT{
 public:
-    ReceiverOT() : PartyOT(1), choice_bits(CONST_k), ui(CONST_k,vZ2k<T,pwr>(CONST_n + CONST_k_)) {
+    ReceiverOT() : PartyOT(1), choice_bits(CONST_k), t(CONST_k,vZ2k<T,pwr>(CONST_n + CONST_k_)),
+                   ui(CONST_k,vZ2k<T,pwr>(CONST_n + CONST_k_)), ai(CONST_k,vZ2k<T,pwr>(CONST_n + CONST_k_))  {
         generateChoiceBitsOT();
     }
 
@@ -56,10 +57,14 @@ public:
     //private:
 
     vector<vector<byte>> keys_bOT;
+    vector<vZ2k<T,pwr>> t;
     vector<vZ2k<T,pwr>> ui;
+    vector<vZ2k<T,pwr>> ai;
 
     void generateChoiceBitsOT();
+    void applyPRF();
     void receiveUi();
+    void computeAi();
 
 };
 

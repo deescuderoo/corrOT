@@ -78,4 +78,9 @@ void SenderOT<T,pwr>::runCreateCorrelation() {
     sampleCorrelation();
     applyPRF();
     sendUi();
+
+    /*cout << "\n--------SENDER s0 = 0--------" << endl;
+    vZ2k<T,pwr>::printVector(t0[0]);
+    cout << "\n--------SENDER s0 = 1--------" << endl;
+    vZ2k<T,pwr>::printVector(t0[0] + correlation);*/
 }

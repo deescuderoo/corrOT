@@ -30,6 +30,16 @@ void ReceiverOT<T,pwr>::run_baseOT(vector<byte> sigma, int nOT, int elementSizeB
 }
 
 template<class T, int pwr>
+void ReceiverOT<T,pwr>::applyPRF() {
+    for (int i = 0; i < CONST_k; i++) {
+        int sizeBytes = (CONST_pwr * (CONST_n + CONST_k_))/8;
+        vector<byte> tmp(sizeBytes);
+        prfCall(prf, keys_bOT[i], tmp, sizeBytes);
+        t[i] = vZ2k<T,pwr>(vectorConversion(tmp, CONST_n + CONST_k_, pwr/8));
+    }
+}
+
+template<class T, int pwr>
 void ReceiverOT<T,pwr>::receiveUi() {
     int length = sizeof(Z2k<T,pwr>) * ui[0].getLength();
     vector<byte> tmp(length);
@@ -41,11 +51,28 @@ void ReceiverOT<T,pwr>::receiveUi() {
 }
 
 template<class T, int pwr>
+void ReceiverOT<T,pwr>::computeAi() {
+    for (int i = 0; i < CONST_k; i++) {
+        if (choice_bits[i]){
+            // bit = 1
+            ai[i] = ui[i] - t[i];
+        } else {
+            ai[i] = t[i];
+        }
+    }
+}
+
+template<class T, int pwr>
 void ReceiverOT<T,pwr>::runInitialize() {
     run_baseOT(choice_bits, CONST_k, CONST_k);
 }
 
 template<class T, int pwr>
 void ReceiverOT<T,pwr>::runCreateCorrelation() {
+    applyPRF();
     receiveUi();
+    computeAi();
+
+    /*cout << "\n--------RECEIVER s0 = " << (int)choice_bits[0] << " --------" << endl;
+    vZ2k<T,pwr>::printVector(ai[0]);*/
 }

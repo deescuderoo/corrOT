@@ -2,6 +2,7 @@
 #include "IntMod.hpp"
 
 int main() {
+    assert (sizeof(Z2k<CONST_T,CONST_pwr>) == sizeof(CONST_T));
 
     string partyNum;
     cout <<"Enter Party Id : "<<endl;
@@ -16,10 +17,9 @@ int main() {
         party->runInitialize();
         party->runCreateCorrelation();
 
-        cout << "\n" << "Vector" << endl;
-        vZ2k<CONST_T, CONST_pwr>::printVectorGroup((party->t0)[1] + (party->t1)[1] + party->correlation);
+        /*cout << "\n" << "Vector" << endl;
+        vZ2k<CONST_T, CONST_pwr>::printVector((party->t0)[1] + (party->t1)[1] + party->correlation);*/
 
-        assert (sizeof(Z2k<CONST_T,CONST_pwr>) == sizeof(CONST_T));
 
 /*        for (int i = 0; i < CONST_n + CONST_k_; i++){
 //            cout << party->correlation.m_data[i].m_data << endl;
@@ -48,8 +48,8 @@ int main() {
         party->runInitialize();
         party->runCreateCorrelation();
 
-        cout << "\n" << "Vector" << endl;
-        vZ2k<CONST_T, CONST_pwr>::printVectorGroup(party->ui[1]);
+        /*cout << "\n" << "Vector" << endl;
+        vZ2k<CONST_T, CONST_pwr>::printVector(party->ui[1]);*/
     }
 
     else{cout<< "Wrong PartyId"<<endl;}
