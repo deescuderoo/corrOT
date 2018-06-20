@@ -22,7 +22,7 @@ private:
 
 public:
     PartyOT(int id)
-            : id(id), prg(new PrgFromOpenSSLAES()) {
+            : id(id), prg(new PrgFromOpenSSLAES()), prf(new OpenSSLAES()) {
         // Sets the channel
         createChannel();
 
@@ -37,6 +37,8 @@ public:
 
 protected:
     PrgFromOpenSSLAES * prg;
+    PseudorandomFunction * prf;
+
 };
 
 class ReceiverOT : public PartyOT{

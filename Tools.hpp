@@ -28,10 +28,10 @@ void printN (vector<byte> & bytes);
 vector<vector<byte>> vectorConversion(vector<byte> & input, int nrows, int ncols);
 
 vector<byte> inToBytes(int paramInt);
-vector<byte> prfCall(PseudorandomFunction *prf,vector<byte> &key);
+vector<byte> prfCall0();
+void prfCall(PseudorandomFunction *prf, vector<byte> &key, vector<byte> &output, int outputBytesLength);
 void runPRF(vector<vector<byte>> &keys0, vector<vector<byte>> &keys1, vector<vector<byte>> &T0, vector<vector<byte>> &T1);
 
-vector<byte> prfCall0();
 
 
 #endif //OT1_TOOLS_HPP

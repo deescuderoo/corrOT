@@ -17,20 +17,25 @@ int main() {
     {
         // Sender
         auto * party = new SenderOT<CONST_T,CONST_pwr>();
-//        party->runInitialize();
-        party->sampleCorrelation(CONST_n);
-        for (int i = 0; i < CONST_n; i++){
-            cout << party->correlation.m_data[i].m_data << endl;
-        }
+        party->runInitialize();
+        party->sampleCorrelation(CONST_n + CONST_k_);
+        party->applyPRF();
+/*        for (int i = 0; i < CONST_n + CONST_k_; i++){
+//            cout << party->correlation.m_data[i].m_data << endl;
+            cout << party->t0[0].m_data[i].m_data << endl;
+        }*/
+        vZ2k<CONST_T, CONST_pwr> subtraction = party->t0[0] - party->t1[0];
+        for (int i = 0; i < subtraction.m_data.size(); i++)
+        cout << subtraction.m_data[i].m_data << endl;
 
-        cout << "PRF" << endl;
-        prfCall0();
+//        cout << "PRF" << endl;
+//        prfCall0();
 
 // ------------- Sending and blocking -------------
 
 
 //        char message[6] = "hello";
-//        party->getChannel().get()->write((byte *)message, 6);
+//        party->getChannel()->write((byte *)message, 6);
 
     }
 
@@ -38,7 +43,7 @@ int main() {
 
         // Receiver
         auto * party = new ReceiverOT();
-//        party->runInitialize();
+        party->runInitialize();
 
     }
 

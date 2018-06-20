@@ -60,63 +60,33 @@ vector<byte> prfCall0()
         prf->setKey(secretkey);
 
         prf->computeBlock(in,0,in.size(),output,16*ctr);
-
-        //printing secret.
-
     }
+    //printing secret.
     for(int i=0;i<output.size();i++)
         cout<<hex<<(int)output[i];
     cout<<endl;
 
     return output;
 }
-
-vector<byte> prfCall(PseudorandomFunction *prf,vector<byte> &key)
+/// Writes (F_k(0), ... ,F_k(c)) into output, where c is such that this vector has length outputBytesLength
+/// (it has to be divisible by 16)
+void prfCall(PseudorandomFunction *prf, vector<byte> &key, vector<byte> &output, int outputBytesLength)
 {
-    int outputLength = (CONST_pwr * (CONST_n + CONST_k_))/8;
-    int keySize = 128;
-    SecretKey secretkey  = prf->generateKey(keySize);
+    output.resize(outputBytesLength);
+//    outputBytesLength = (CONST_pwr * (CONST_n + CONST_k_))/8;
+//    int keySize = 128;
+//    SecretKey secretkey  = prf->generateKey(keySize);
+    SecretKey secretkey(key,"AES");
+    prf->setKey(secretkey);
 
-//    SecretKey secretkey(key,"AES");
-
-    vector<byte> output(outputLength);
     vector<byte> in;
 
-    for(int ctr=0;ctr<outputLength/16;ctr++)
+    for(int ctr=0; ctr < outputBytesLength/16; ctr++) // The output of AES is 16 bytes long
     {
         in = inToBytes(ctr);
-        prf->setKey(secretkey);
-
-        prf->computeBlock(in,0,in.size(),output,16*ctr);
-
-        //printing secret.
-
+        prf->computeBlock(in, 0, in.size(), output, 16*ctr);
     }
-    for(int i=0;i<output.size();i++)
+/*    for(int i=0;i<output.size();i++)
         cout<<hex<<(int)output[i];
-    cout<<endl;
-
-    return output;
-
+    cout<<endl;*/
 }
-
-//harsh 6/18/2018
-//void runPRF(vector<vector<byte>> &keys0, vector<vector<byte>> &keys1, vector<vector<byte>> &T0, vector<vector<byte>> &T1)
-//{
-//    PseudorandomFunction *prf = new OpenSSLAES();
-//
-//    int maxCount = (CONST_pwr * (CONST_n + CONST_k_))/128;
-//
-//    T0.resize(maxCount,vector<byte>(16));
-//    T1.resize(maxCount,vector<byte>(16));
-//
-//
-//
-//    for (int i = 0;i<CONST_k;i++) {
-//        copy_n(prfCall(prf,keys0[i],maxCount).begin(), 16,T0.begin()+16*i);
-//        copy_n(prfCall(prf,keys1[i],maxCount).begin(), 16,T1.begin()+16*i);
-//        //T0 = prfCall(prf,keys0[i],maxCount);
-//        //T1 = prfCall(prf,keys1[i],maxCount);
-//    }
-//
-//}
