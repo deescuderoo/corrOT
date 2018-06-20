@@ -1,4 +1,4 @@
-#include "Sender.hpp"
+#include "OT.hpp"
 #include "IntMod.hpp"
 
 int main() {
@@ -15,6 +15,9 @@ int main() {
         auto * party = new SenderOT<CONST_T,CONST_pwr>();
         party->runInitialize();
         party->runCreateCorrelation();
+
+        cout << "\n" << "Vector" << endl;
+        vZ2k<CONST_T, CONST_pwr>::printVectorGroup((party->t0)[1] + (party->t1)[1] + party->correlation);
 
         assert (sizeof(Z2k<CONST_T,CONST_pwr>) == sizeof(CONST_T));
 
@@ -43,7 +46,10 @@ int main() {
         // Receiver
         auto * party = new ReceiverOT<CONST_T,CONST_pwr>();
         party->runInitialize();
+        party->runCreateCorrelation();
 
+        cout << "\n" << "Vector" << endl;
+        vZ2k<CONST_T, CONST_pwr>::printVectorGroup(party->ui[1]);
     }
 
     else{cout<< "Wrong PartyId"<<endl;}

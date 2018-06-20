@@ -62,19 +62,20 @@ void SenderOT<T,pwr>::applyPRF() {
 
 template<class T, int pwr>
 void SenderOT<T,pwr>::sendUi() {
+    int length = sizeof(Z2k<T,pwr>) * t0[0].getLength();
     for (int i = 0; i < CONST_k; i++){
         assert(correlation.getLength() == t0[0].getLength());
         assert(correlation.getLength() == t1[0].getLength());
-
-        byte * ptr = (t0[i] + t1[i] + correlation).getBytePtr();
-        int length = sizeof(Z2k<T,pwr>) * t0[i].getLength();
+        vZ2k<T,pwr> ui = t0[i] + t1[i] + correlation;
+        byte * ptr = ui.getBytePtr();
+//        printN(ptr, length);
         getChannel()->write(ptr, length);
     }
 };
 
 template<class T, int pwr>
 void SenderOT<T,pwr>::runCreateCorrelation() {
-    this->sampleCorrelation();
-    this->applyPRF();
-    this->sendUi();
+    sampleCorrelation();
+    applyPRF();
+    sendUi();
 }

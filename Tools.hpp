@@ -14,8 +14,9 @@
 // Length of base OTs
 #define SIZE_OT CONST_k/8
 
-#define CONST_T uint
 #define CONST_pwr 32
+
+typedef unsigned int CONST_T;
 
 #include <iostream>
 #include <libscapi/include/interactive_mid_protocols/OTExtensionBristol.hpp>
@@ -25,10 +26,10 @@
 
 void printN (byte * bytes, int N);
 void printN (vector<byte> & bytes);
+
 vector<vector<byte>> vectorConversion(vector<byte> & input, int nrows, int ncols);
 
 vector<byte> inToBytes(int paramInt);
-vector<byte> prfCall0();
 void prfCall(PseudorandomFunction *prf, vector<byte> &key, vector<byte> &output, int outputBytesLength);
 void runPRF(vector<vector<byte>> &keys0, vector<vector<byte>> &keys1, vector<vector<byte>> &T0, vector<vector<byte>> &T1);
 

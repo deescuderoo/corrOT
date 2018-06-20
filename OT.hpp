@@ -59,6 +59,7 @@ public:
     vector<vZ2k<T,pwr>> ui;
 
     void generateChoiceBitsOT();
+    void receiveUi();
 
 };
 

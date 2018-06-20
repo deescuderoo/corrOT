@@ -20,13 +20,11 @@ void printN (vector<byte> & bytes) {
 
 vector<vector<byte>> vectorConversion(vector<byte> & input, int nrows, int ncols){
     assert (input.size() == nrows * ncols);
-    vector<vector<byte> > output;
-    output.resize(nrows, vector<byte>(ncols));
+    vector<vector<byte>> output(nrows, vector<byte>(ncols));
     for(int i=0; i<nrows; i++)
     {
-        //vector<int>::const_iterator first = b.begin() + 2*i;
-        //vector<int>::const_iterator last = b.begin() + 2*(i+1);
-        copy_n(input.begin() + ncols*i, ncols,output[i].begin());
+//        *(output[i].data()) = *(input.data() + i*ncols);
+        copy_n(input.begin() + ncols*i, ncols, output[i].begin());
     }
     return output;
 }

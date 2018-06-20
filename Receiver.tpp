@@ -30,11 +30,22 @@ void ReceiverOT<T,pwr>::run_baseOT(vector<byte> sigma, int nOT, int elementSizeB
 }
 
 template<class T, int pwr>
+void ReceiverOT<T,pwr>::receiveUi() {
+    int length = sizeof(Z2k<T,pwr>) * ui[0].getLength();
+    vector<byte> tmp(length);
+    for (int i = 0; i < CONST_k; i++){
+        getChannel()->read(tmp.data(), length);
+//        printN(tmp);
+        ui[i] = vZ2k<T,pwr>(vectorConversion(tmp, CONST_n + CONST_k_, pwr/8));
+    }
+}
+
+template<class T, int pwr>
 void ReceiverOT<T,pwr>::runInitialize() {
     run_baseOT(choice_bits, CONST_k, CONST_k);
 }
 
 template<class T, int pwr>
 void ReceiverOT<T,pwr>::runCreateCorrelation() {
-
+    receiveUi();
 }
