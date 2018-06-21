@@ -25,12 +25,6 @@ void SenderOT<T,pwr>::run_baseOT(vector<vector<byte>> data0, vector<vector<byte>
     keys1_bOT = vectorConversion(outputbytes1, CONST_k, SIZE_OT);
 }
 
-
-template<class T, int pwr>
-void SenderOT<T,pwr>::runInitialize() {
-    run_baseOT(keys0_bOT, keys1_bOT, CONST_k, CONST_k);
-}
-
 template<class T, int pwr>
 void SenderOT<T,pwr>::sampleCorrelation() {
     int length = CONST_n + CONST_k_;
@@ -78,14 +72,12 @@ void SenderOT<T,pwr>::generateHashes() {
     int size = t0[0].getLength() * sizeof(Z2k<T,pwr>);
     for (int alpha = 0; alpha < CONST_k; alpha++){
         for (int beta = 0; beta < CONST_k; beta++){
-            Hash_value(hash, (t0[alpha] - t0[beta]).getBytePtr(), h00 + hashOutput*(beta + alpha*CONST_k), size);
-            Hash_value(hash, (t0[alpha] - t1[beta]).getBytePtr(), h01 + hashOutput*(beta + alpha*CONST_k), size);
-            Hash_value(hash, (t1[alpha] - t0[beta]).getBytePtr(), h10 + hashOutput*(beta + alpha*CONST_k), size);
-            Hash_value(hash, (t1[alpha] - t1[beta]).getBytePtr(), h11 + hashOutput*(beta + alpha*CONST_k), size);
+            Hash_value(hash, (t0[alpha] - t0[beta]).getBytePtr(), h00 + HASH_OUTPUT_LENGTH*(beta + alpha*CONST_k), size);
+            Hash_value(hash, (t0[alpha] - t1[beta]).getBytePtr(), h01 + HASH_OUTPUT_LENGTH*(beta + alpha*CONST_k), size);
+            Hash_value(hash, (t1[alpha] - t0[beta]).getBytePtr(), h10 + HASH_OUTPUT_LENGTH*(beta + alpha*CONST_k), size);
+            Hash_value(hash, (t1[alpha] - t1[beta]).getBytePtr(), h11 + HASH_OUTPUT_LENGTH*(beta + alpha*CONST_k), size);
 
-
-
-//            printN(h00 + hashOutput*(beta + alpha*CONST_k), 32);
+//            printN(h00 + HASH_OUTPUT_LENGTH*(beta + alpha*CONST_k), 32);
 //            printf("%p\n", (void*)h00);
         }
     }
@@ -101,7 +93,7 @@ void SenderOT<T,pwr>::generateHashes() {
 
 template<class T, int pwr>
 void SenderOT<T,pwr>::sendHashes() {
-    int length = hashOutput * CONST_k * CONST_k;
+    int length = HASH_OUTPUT_LENGTH * CONST_k * CONST_k;
 //    int length = 32;
 //    printf("%p\n", (void*)h00);
 //    printN(h00, length);
@@ -121,9 +113,18 @@ void SenderOT<T,pwr>::sendHashes() {
 };
 
 template<class T, int pwr>
+void SenderOT<T,pwr>::runInitialize() {
+    cout << "---- Running base OT ----" << endl;
+    run_baseOT(keys0_bOT, keys1_bOT, CONST_k, CONST_k);
+}
+
+template<class T, int pwr>
 void SenderOT<T,pwr>::runCreateCorrelation() {
+    cout << "---- Sampling correlation ----" << endl;
     sampleCorrelation();
+    cout << "---- Applying PRF ----" << endl;
     applyPRF();
+    cout << "---- Sending u_i's ----" << endl;
     sendUi();
 
     /*cout << "\n--------SENDER s0 = 0--------" << endl;
@@ -134,6 +135,8 @@ void SenderOT<T,pwr>::runCreateCorrelation() {
 
 template<class T, int pwr>
 void SenderOT<T,pwr>::runConsistencyCheck() {
+    cout << "---- Generating hashes ----" << endl;
     generateHashes();
+    cout << "---- Sending hashes ----" << endl;
     sendHashes();
 }

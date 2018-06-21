@@ -66,10 +66,10 @@ public:
     vector<vZ2k<T,pwr>> ui;
     vector<vZ2k<T,pwr>> ai;
 
-    byte h00[hashOutput * CONST_k * CONST_k];
-    byte h01[hashOutput * CONST_k * CONST_k];
-    byte h10[hashOutput * CONST_k * CONST_k];
-    byte h11[hashOutput * CONST_k * CONST_k];
+    byte h00[HASH_OUTPUT_LENGTH * CONST_k * CONST_k];
+    byte h01[HASH_OUTPUT_LENGTH * CONST_k * CONST_k];
+    byte h10[HASH_OUTPUT_LENGTH * CONST_k * CONST_k];
+    byte h11[HASH_OUTPUT_LENGTH * CONST_k * CONST_k];
 
     void generateChoiceBitsOT();
     void applyPRF();
@@ -84,8 +84,8 @@ class SenderOT : public PartyOT{
 public:
     SenderOT() : PartyOT(0), keys0_bOT(CONST_k, vector<byte>(SIZE_OT)), keys1_bOT(CONST_k, vector<byte>(SIZE_OT)),
                  correlation(CONST_n + CONST_k_), t0(CONST_k,vZ2k<T,pwr>(CONST_n + CONST_k_)), t1(CONST_k,vZ2k<T,pwr>(CONST_n + CONST_k_))
-    /*             ,h00(CONST_k * CONST_k, vector<byte>(hashOutput)), h01(CONST_k * CONST_k, vector<byte>(hashOutput)),
-                 h10(CONST_k * CONST_k, vector<byte>(hashOutput)), h11(CONST_k * CONST_k, vector<byte>(hashOutput))
+    /*             ,h00(CONST_k * CONST_k, vector<byte>(HASH_OUTPUT_LENGTH)), h01(CONST_k * CONST_k, vector<byte>(HASH_OUTPUT_LENGTH)),
+                 h10(CONST_k * CONST_k, vector<byte>(HASH_OUTPUT_LENGTH)), h11(CONST_k * CONST_k, vector<byte>(HASH_OUTPUT_LENGTH))
     */{}
 
     void runInitialize() override;
@@ -101,10 +101,10 @@ public:
     vector<vZ2k<T,pwr>> t0;
     vector<vZ2k<T,pwr>> t1;
 
-    byte h00[hashOutput * CONST_k * CONST_k];
-    byte h01[hashOutput * CONST_k * CONST_k];
-    byte h10[hashOutput * CONST_k * CONST_k];
-    byte h11[hashOutput * CONST_k * CONST_k];
+    byte h00[HASH_OUTPUT_LENGTH * CONST_k * CONST_k];
+    byte h01[HASH_OUTPUT_LENGTH * CONST_k * CONST_k];
+    byte h10[HASH_OUTPUT_LENGTH * CONST_k * CONST_k];
+    byte h11[HASH_OUTPUT_LENGTH * CONST_k * CONST_k];
 
 private:
     void run_baseOT(vector<vector<byte>> data0, vector<vector<byte>> data1, int nOT, int elementSizeBits);

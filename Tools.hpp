@@ -5,6 +5,8 @@
 #ifndef OT1_TOOLS_HPP
 #define OT1_TOOLS_HPP
 
+// (k' + n) must be divisible by 4
+
 // Number of OTs
 #define CONST_k 128
 // Length for the correlated OTs
@@ -16,7 +18,7 @@
 
 #define CONST_pwr 32
 
-#define hashOutput 32
+#define HASH_OUTPUT_LENGTH 32
 
 typedef unsigned int CONST_T;
 
