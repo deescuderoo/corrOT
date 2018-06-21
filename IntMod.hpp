@@ -43,7 +43,12 @@ public:
     Z2k operator-(Z2k rhs);
     Z2k operator*(Z2k rhs);
     Z2k operator*(vZ2k<T,pwr> rhs);
-    };
+
+    // Methods
+    void subtract(Z2k<T, pwr> & rhs);
+    void add(Z2k<T, pwr> & rhs);
+
+};
 
 template <class T, int pwr>
 class vZ2k {
@@ -68,13 +73,10 @@ public:
     vZ2k operator-(vZ2k rhs);
 //    vZ2k operator*(Z2k rhs);
 
-
-    //
-//    vZ2k & operator*(Z2k lhs, vZ2k& rhs);
-//    vZ2k operator*(vZ2k& lhs, Z2k rhs);
-    //
-
     // Methods;
+    vZ2k subtract(vZ2k<T, pwr> & rhs);
+    vZ2k add(vZ2k<T, pwr> & rhs);
+
     vector<Z2k<T, pwr>> getVector() {
         return m_data;
     };

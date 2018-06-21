@@ -60,7 +60,7 @@ void SenderOT<T,pwr>::sendUi() {
     for (int i = 0; i < CONST_k; i++){
         assert(correlation.getLength() == t0[0].getLength());
         assert(correlation.getLength() == t1[0].getLength());
-        vZ2k<T,pwr> ui = t0[i] + t1[i] + correlation;
+        vZ2k<T,pwr> ui = t0[i].add(t1[i]).add(correlation);
         byte * ptr = ui.getBytePtr();
 //        printN(ptr, length);
         getChannel()->write(ptr, length);
@@ -70,12 +70,23 @@ void SenderOT<T,pwr>::sendUi() {
 template<class T, int pwr>
 void SenderOT<T,pwr>::generateHashes() {
     int size = t0[0].getLength() * sizeof(Z2k<T,pwr>);
+    vZ2k<T,pwr> tmpVector00(CONST_n + CONST_k_);
+    vZ2k<T,pwr> tmpVector01(CONST_n + CONST_k_);
+    vZ2k<T,pwr> tmpVector10(CONST_n + CONST_k_);
+    vZ2k<T,pwr> tmpVector11(CONST_n + CONST_k_);
+
+
     for (int alpha = 0; alpha < CONST_k; alpha++){
         for (int beta = 0; beta < CONST_k; beta++){
-            Hash_value(hash, (t0[alpha] - t0[beta]).getBytePtr(), h00 + HASH_OUTPUT_LENGTH*(beta + alpha*CONST_k), size);
-            Hash_value(hash, (t0[alpha] - t1[beta]).getBytePtr(), h01 + HASH_OUTPUT_LENGTH*(beta + alpha*CONST_k), size);
-            Hash_value(hash, (t1[alpha] - t0[beta]).getBytePtr(), h10 + HASH_OUTPUT_LENGTH*(beta + alpha*CONST_k), size);
-            Hash_value(hash, (t1[alpha] - t1[beta]).getBytePtr(), h11 + HASH_OUTPUT_LENGTH*(beta + alpha*CONST_k), size);
+            tmpVector00 = t0[alpha].subtract(t0[beta]);
+            tmpVector01 = t0[alpha].subtract(t1[beta]);
+            tmpVector10 = t1[alpha].subtract(t0[beta]);
+            tmpVector11 = t1[alpha].subtract(t1[beta]);
+
+            Hash_value(hash, tmpVector00.getBytePtr(), h00 + HASH_OUTPUT_LENGTH*(beta + alpha*CONST_k), size);
+            Hash_value(hash, tmpVector01.getBytePtr(), h01 + HASH_OUTPUT_LENGTH*(beta + alpha*CONST_k), size);
+            Hash_value(hash, tmpVector10.getBytePtr(), h10 + HASH_OUTPUT_LENGTH*(beta + alpha*CONST_k), size);
+            Hash_value(hash, tmpVector11.getBytePtr(), h11 + HASH_OUTPUT_LENGTH*(beta + alpha*CONST_k), size);
 
 //            printN(h00 + HASH_OUTPUT_LENGTH*(beta + alpha*CONST_k), 32);
 //            printf("%p\n", (void*)h00);
