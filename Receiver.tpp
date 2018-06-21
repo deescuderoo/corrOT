@@ -55,7 +55,7 @@ void ReceiverOT<T,pwr>::computeAi() {
     for (int i = 0; i < CONST_k; i++) {
         if (choice_bits[i] == 1){
             // bit = 1
-            ai[i] = ui[i].subtract(t[i]);
+            ui[i].subtract(t[i], ai[i]);
         } else {
             ai[i] = t[i];
         }
@@ -79,14 +79,16 @@ void ReceiverOT<T,pwr>::checkHashes() {
 
     vZ2k<T,pwr> tmpVector0(CONST_n + CONST_k_);
     vZ2k<T,pwr> tmpVector1(CONST_n + CONST_k_);
+    vZ2k<T,pwr> tmpVector2(CONST_n + CONST_k_);
 
 //    cout << "choicebits " << (int)choice_bits[0] << (int)choice_bits[1] << endl;
 //    vZ2k<T,pwr>::printVector(t[0] - t[1]);
 
     for (int alpha = 0; alpha < CONST_k; alpha++){
         for (int beta = 0; beta < CONST_k; beta++){
-            tmpVector0 = t[alpha].subtract(t[beta]);
-            tmpVector1 = ui[alpha].subtract(ui[beta]).subtract(tmpVector0);
+            t[alpha].subtract(t[beta], tmpVector0);
+            ui[alpha].subtract(ui[beta], tmpVector2);
+            tmpVector2.subtract(tmpVector0, tmpVector1);
             Hash_value(hash, tmpVector0.getBytePtr(), tmpBuffer0, size);
             Hash_value(hash, tmpVector1.getBytePtr(), tmpBuffer1, size);
 

@@ -56,7 +56,7 @@ public:
     // Constructors
     vZ2k() : m_data(vector<Z2k<T, pwr>>()){};
     vZ2k(int size) : m_data(vector<Z2k<T, pwr>>(size)){};
-    vZ2k(vector<Z2k<T, pwr>> data) : m_data(data){
+    vZ2k(vector<Z2k<T, pwr>> & data) : m_data(data){
         assert (sizeof(T) == pwr/8);
     };
     vZ2k(vector<vector<byte>> data) : m_data(vector<Z2k<T, pwr>>(data.size())){
@@ -74,8 +74,8 @@ public:
 //    vZ2k operator*(Z2k rhs);
 
     // Methods;
-    vZ2k subtract(vZ2k<T, pwr> & rhs);
-    vZ2k add(vZ2k<T, pwr> & rhs);
+    void subtract(vZ2k<T, pwr> & rhs, vZ2k<T, pwr> & result);
+    void add(vZ2k<T, pwr> & rhs, vZ2k<T, pwr> & result);
 
     vector<Z2k<T, pwr>> getVector() {
         return m_data;

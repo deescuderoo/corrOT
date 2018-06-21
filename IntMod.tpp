@@ -62,23 +62,19 @@ vZ2k<T, pwr> vZ2k<T, pwr>::operator-(vZ2k<T, pwr> rhs) {
 }
 
 template<class T, int pwr>
-vZ2k<T, pwr> vZ2k<T, pwr>::subtract(vZ2k<T, pwr> & rhs) {
+void vZ2k<T, pwr>::subtract(vZ2k<T, pwr> & rhs, vZ2k<T, pwr> & result) {
     assert(this->getLength() == rhs.getLength());
-    vector<Z2k<T, pwr>> result(this->getLength());
     for (int i = 0; i < this->getLength(); i++){
-        result[i] = this->m_data[i] - rhs.m_data[i];
+        result.m_data[i] = this->m_data[i] - rhs.m_data[i];
     }
-    return result;
 };
 
 template<class T, int pwr>
-vZ2k<T, pwr> vZ2k<T, pwr>::add(vZ2k<T, pwr> & rhs) {
+void vZ2k<T, pwr>::add(vZ2k<T, pwr> & rhs, vZ2k<T, pwr> & result) {
     assert(this->getLength() == rhs.getLength());
-    vector<Z2k<T, pwr>> result(this->getLength());
     for (int i = 0; i < this->getLength(); i++){
-        result[i] = this->m_data[i] + rhs.m_data[i];
+        result.m_data[i] = this->m_data[i] + rhs.m_data[i];
     }
-    return result;
 };
 
 //template<class T, int pwr>
