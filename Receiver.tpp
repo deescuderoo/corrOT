@@ -55,7 +55,7 @@ void ReceiverOT<T,pwr>::computeAi() {
     for (int i = 0; i < CONST_k; i++) {
         if (choice_bits[i] == 1){
             // bit = 1
-            ai[i] = ui[i] - t[i];
+            ui[i].subtract(t[i], ai[i]);
         } else {
             ai[i] = t[i];
         }
@@ -77,19 +77,27 @@ void ReceiverOT<T,pwr>::checkHashes() {
     byte tmpBuffer0[HASH_OUTPUT_LENGTH];
     byte tmpBuffer1[HASH_OUTPUT_LENGTH];
 
+    vZ2k<T,pwr> tmpVector0(CONST_n + CONST_k_);
+    vZ2k<T,pwr> tmpVector1(CONST_n + CONST_k_);
+    vZ2k<T,pwr> tmpVector2(CONST_n + CONST_k_);
 
 //    cout << "choicebits " << (int)choice_bits[0] << (int)choice_bits[1] << endl;
 //    vZ2k<T,pwr>::printVector(t[0] - t[1]);
 
     for (int alpha = 0; alpha < CONST_k; alpha++){
         for (int beta = 0; beta < CONST_k; beta++){
+            t[alpha].subtract(t[beta], tmpVector0);
+            ui[alpha].subtract(ui[beta], tmpVector2);
+            tmpVector2.subtract(tmpVector0, tmpVector1);
+            Hash_value(hash, tmpVector0.getBytePtr(), tmpBuffer0, size);
+            Hash_value(hash, tmpVector1.getBytePtr(), tmpBuffer1, size);
+
             if (memcmp(ui[alpha].getBytePtr(), ui[beta].getBytePtr(), size) == 0 && alpha != beta){
                 cout << "I COMPLAIN!!" << endl;
                 assert(false);
             }
+
             if (choice_bits[alpha] == 0 && choice_bits[beta] == 0){
-                Hash_value(hash, (t[alpha] - t[beta]).getBytePtr(), tmpBuffer0, size);
-                Hash_value(hash, (ui[alpha] - ui[beta] - t[alpha] + t[beta]).getBytePtr(), tmpBuffer1, size);
                 if (memcmp(tmpBuffer0, h00 + HASH_OUTPUT_LENGTH*(beta + alpha*CONST_k), HASH_OUTPUT_LENGTH) != 0 ||
                     memcmp(tmpBuffer1, h11 + HASH_OUTPUT_LENGTH*(beta + alpha*CONST_k), HASH_OUTPUT_LENGTH) != 0){
                     cout << "I COMPLAIN!!" << endl;
@@ -97,8 +105,7 @@ void ReceiverOT<T,pwr>::checkHashes() {
                 }
             } else
             if (choice_bits[alpha] == 0 && choice_bits[beta] == 1){
-                Hash_value(hash, (t[alpha] - t[beta]).getBytePtr(), tmpBuffer0, size);
-                Hash_value(hash, (ui[alpha] - ui[beta] - t[alpha] + t[beta]).getBytePtr(), tmpBuffer1, size);
+
                 if (memcmp(tmpBuffer0, h01 + HASH_OUTPUT_LENGTH*(beta + alpha*CONST_k), HASH_OUTPUT_LENGTH) != 0 ||
                     memcmp(tmpBuffer1, h10 + HASH_OUTPUT_LENGTH*(beta + alpha*CONST_k), HASH_OUTPUT_LENGTH) != 0 ||
                     memcmp(ui[alpha].getBytePtr(), ui[beta].getBytePtr(), size) == 0){
@@ -107,8 +114,6 @@ void ReceiverOT<T,pwr>::checkHashes() {
                 }
             } else
             if (choice_bits[alpha] == 1 && choice_bits[beta] == 0){
-                Hash_value(hash, (t[alpha] - t[beta]).getBytePtr(), tmpBuffer0, size);
-                Hash_value(hash, (ui[alpha] - ui[beta] - t[alpha] + t[beta]).getBytePtr(), tmpBuffer1, size);
                 if (memcmp(tmpBuffer0, h10 + HASH_OUTPUT_LENGTH*(beta + alpha*CONST_k), HASH_OUTPUT_LENGTH) != 0 ||
                     memcmp(tmpBuffer1, h01 + HASH_OUTPUT_LENGTH*(beta + alpha*CONST_k), HASH_OUTPUT_LENGTH) != 0 ||
                     memcmp(ui[alpha].getBytePtr(), ui[beta].getBytePtr(), size) == 0){
@@ -117,8 +122,6 @@ void ReceiverOT<T,pwr>::checkHashes() {
                 }
             } else
             if (choice_bits[alpha] == 1 && choice_bits[beta] == 1){
-                Hash_value(hash, (t[alpha] - t[beta]).getBytePtr(), tmpBuffer0, size);
-                Hash_value(hash, (ui[alpha] - ui[beta] - t[alpha] + t[beta]).getBytePtr(), tmpBuffer1, size);
                 if (memcmp(tmpBuffer0, h11 + HASH_OUTPUT_LENGTH*(beta + alpha*CONST_k), HASH_OUTPUT_LENGTH) != 0||
                     memcmp(tmpBuffer1, h00 + HASH_OUTPUT_LENGTH*(beta + alpha*CONST_k), HASH_OUTPUT_LENGTH) != 0){
                     cout << "I COMPLAIN!!" << endl;

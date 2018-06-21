@@ -43,7 +43,12 @@ public:
     Z2k operator-(Z2k rhs);
     Z2k operator*(Z2k rhs);
     Z2k operator*(vZ2k<T,pwr> rhs);
-    };
+
+    // Methods
+    void subtract(Z2k<T, pwr> & rhs);
+    void add(Z2k<T, pwr> & rhs);
+
+};
 
 template <class T, int pwr>
 class vZ2k {
@@ -51,7 +56,7 @@ public:
     // Constructors
     vZ2k() : m_data(vector<Z2k<T, pwr>>()){};
     vZ2k(int size) : m_data(vector<Z2k<T, pwr>>(size)){};
-    vZ2k(vector<Z2k<T, pwr>> data) : m_data(data){
+    vZ2k(vector<Z2k<T, pwr>> & data) : m_data(data){
         assert (sizeof(T) == pwr/8);
     };
     vZ2k(vector<vector<byte>> data) : m_data(vector<Z2k<T, pwr>>(data.size())){
@@ -63,18 +68,16 @@ public:
     // Attributes
     vector<Z2k<T, pwr>> m_data;
 
+
     // Operators
     vZ2k operator+(vZ2k rhs); //TODO: Write space-saving operations
     vZ2k operator-(vZ2k rhs);
 //    vZ2k operator*(Z2k rhs);
 
-
-    //
-//    vZ2k & operator*(Z2k lhs, vZ2k& rhs);
-//    vZ2k operator*(vZ2k& lhs, Z2k rhs);
-    //
-
     // Methods;
+    void subtract(vZ2k<T, pwr> & rhs, vZ2k<T, pwr> & result);
+    void add(vZ2k<T, pwr> & rhs, vZ2k<T, pwr> & result);
+
     vector<Z2k<T, pwr>> getVector() {
         return m_data;
     };

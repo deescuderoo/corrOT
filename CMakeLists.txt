@@ -6,6 +6,8 @@ INCLUDE_DIRECTORIES($ENV{HOME} $ENV{HOME}/libscapi/install/include/ $ENV{HOME}/l
 
 
 set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mavx -maes -mpclmul -O3")
+
 
 link_directories(/usr/ssl/lib/ $ENV{HOME}/libscapi/install/lib)
 
