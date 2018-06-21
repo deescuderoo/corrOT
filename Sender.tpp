@@ -83,7 +83,7 @@ void SenderOT<T,pwr>::generateHashes() {
 
     for (int alpha = 0; alpha < CONST_k; alpha++){
         for (int beta = 0; beta < CONST_k; beta++){
-            cout << alpha << " " << beta << endl;
+//            cout << alpha << " " << beta << endl;
             t0[alpha].subtract(t0[beta], tmpVector00);
             t0[alpha].subtract(t1[beta], tmpVector01);
             t1[alpha].subtract(t0[beta], tmpVector10);

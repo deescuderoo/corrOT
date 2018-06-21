@@ -64,7 +64,8 @@ vZ2k<T, pwr> vZ2k<T, pwr>::operator-(vZ2k<T, pwr> rhs) {
 template<class T, int pwr>
 void vZ2k<T, pwr>::subtract(vZ2k<T, pwr> & rhs, vZ2k<T, pwr> & result) {
     assert(this->getLength() == rhs.getLength());
-    for (int i = 0; i < this->getLength(); i++){
+    size_t length = this->getLength();
+    for (int i = 0; i < length; i++){
         result.m_data[i] = this->m_data[i] - rhs.m_data[i];
     }
 };
@@ -72,7 +73,8 @@ void vZ2k<T, pwr>::subtract(vZ2k<T, pwr> & rhs, vZ2k<T, pwr> & result) {
 template<class T, int pwr>
 void vZ2k<T, pwr>::add(vZ2k<T, pwr> & rhs, vZ2k<T, pwr> & result) {
     assert(this->getLength() == rhs.getLength());
-    for (int i = 0; i < this->getLength(); i++){
+    size_t length = this->getLength();
+    for (int i = 0; i < length; i++){
         result.m_data[i] = this->m_data[i] + rhs.m_data[i];
     }
 };

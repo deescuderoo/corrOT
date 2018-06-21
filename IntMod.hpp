@@ -68,6 +68,7 @@ public:
     // Attributes
     vector<Z2k<T, pwr>> m_data;
 
+
     // Operators
     vZ2k operator+(vZ2k rhs); //TODO: Write space-saving operations
     vZ2k operator-(vZ2k rhs);

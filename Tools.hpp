@@ -10,7 +10,7 @@
 // Number of OTs
 #define CONST_k 128
 // Length for the correlated OTs
-#define CONST_n 999
+#define CONST_n 9999
 // Length of masking correlated vector
 #define CONST_k_ 1
 // Length of base OTs
