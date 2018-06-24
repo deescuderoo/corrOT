@@ -51,8 +51,16 @@ void SenderOT<T,pwr>::applyPRF() {
 //        cout << "Key 1," << i << endl;
 //        printN(keys1_bOT[i]);
 
-        prfCall(prf, keys0_bOT[i], tmp0, sizeBytes);
-        prfCall(prf, keys1_bOT[i], tmp1, sizeBytes);
+//        prfCall(prf, keys_bOT[i], tmp, sizeBytes);
+
+
+//        prfCall(prf, keys0_bOT[i], tmp0, sizeBytes);
+//        prfCall(prf, keys1_bOT[i], tmp1, sizeBytes);
+
+        prf->init(keys0_bOT[i].data(), sizeBytes);
+        prf->getBytes(tmp0.data(), sizeBytes);
+        prf->init(keys1_bOT[i].data(), sizeBytes);
+        prf->getBytes(tmp1.data(), sizeBytes);
 
         t0[i] = vZ2k<T,pwr>(vectorConversion(tmp0, CONST_n + CONST_k_, pwr/8));
         t1[i] = vZ2k<T,pwr>(vectorConversion(tmp1, CONST_n + CONST_k_, pwr/8));

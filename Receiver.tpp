@@ -6,7 +6,7 @@ void ReceiverOT<T,pwr>::generateChoiceBitsOT() {
     prg->getBytes(&choice_bits[0], CONST_k);
 
     for (unsigned char &choice_bit : choice_bits) {
-        choice_bit %= 2; // Project byte to bit
+        choice_bit %= 2; // Map byte to bit
 //        cout << (int)choice_bits[i] << endl;
     }
 //    cout << "Choice bits" << endl;
@@ -37,7 +37,10 @@ void ReceiverOT<T,pwr>::applyPRF() {
     for (int i = 0; i < CONST_k; i++) {
         int sizeBytes = (CONST_pwr * (CONST_n + CONST_k_))/8;
         vector<byte> tmp(sizeBytes);
-        prfCall(prf, keys_bOT[i], tmp, sizeBytes);
+
+        prf->init(keys_bOT[i].data(), sizeBytes);
+//        prfCall(prf, keys_bOT[i], tmp, sizeBytes);
+        prf->getBytes(tmp.data(), sizeBytes);
         t[i] = vZ2k<T,pwr>(vectorConversion(tmp, CONST_n + CONST_k_, pwr/8));
     }
 }

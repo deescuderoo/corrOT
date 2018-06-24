@@ -52,7 +52,7 @@ class COTSK_Prg {
          }
             _ctr_inc = 1;
 
-         memcpy(_key,key128bit,16);
+         memcpy(_key, key128bit, 16);
          //print128("prg key",_key);
            // print128("iv",_iv);
 
@@ -62,20 +62,10 @@ class COTSK_Prg {
 
       }
 
-      void randomInit(uint32_t maxBytes) {
-
-         byte randKey[16];
-         auto r = rand();
-         for (uint32_t i=0; i < 16; i++) {
-            randKey[i] = (byte) (i + r);
-         }
-         init(randKey,maxBytes);
-      }
-
-      const byte *getBytes( uint32_t sizeBytes) {
+      const byte *getBytes(uint32_t sizeBytes) {
          return doGetBytes (_buff,sizeBytes);
       }
-        const byte *getBytes( byte *client_buff, uint32_t sizeBytes) {
+        const byte *getBytes(byte *client_buff, uint32_t sizeBytes) {
             return doGetBytes (client_buff,sizeBytes);
         }
 

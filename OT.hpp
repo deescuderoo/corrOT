@@ -23,7 +23,7 @@ private:
 
 public:
     PartyOT(int id)
-            : id(id), prg(new COTSK_Prg()), prf(new OpenSSLAES()), hash(new SHA256_CTX) {
+            : id(id), prg(new COTSK_Prg()), prf(new COTSK_Prg()), hash(new SHA256_CTX) {
         // Sets the channel
         createChannel();
 
@@ -45,7 +45,7 @@ public:
 
 protected:
     COTSK_Prg * prg;
-    PseudorandomFunction * prf;
+    COTSK_Prg * prf;
     SHA256_CTX * hash;
 
 };
