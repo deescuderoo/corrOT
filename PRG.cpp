@@ -57,7 +57,7 @@ class COTSK_Prg {
            // print128("iv",_iv);
 
             _aes = new EVP_CIPHER_CTX();
-           int rc = EVP_EncryptInit(_aes, EVP_aes_128_ecb(),_key, _iv);
+           int rc = EVP_EncryptInit(_aes, EVP_aes_128_ecb(), _key, _iv);
             assert (rc == 1);
 
       }

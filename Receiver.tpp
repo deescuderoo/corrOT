@@ -1,17 +1,14 @@
 template<class T, int pwr>
 void ReceiverOT<T,pwr>::generateChoiceBitsOT() {
     size_t size = choice_bits.size();
-    memcpy(&choice_bits[0], prg->getPRGBytesEX(size), size);
+//    memcpy(&choice_bits[0], prg->getPRGBytesEX(size), size);
 
-    prg1->randomInit(100000 * 8);
-//    prg1->getBytes(&choice_bits[0], CONST_k);
-
+    prg->getBytes(&choice_bits[0], CONST_k);
 
     for (unsigned char &choice_bit : choice_bits) {
         choice_bit %= 2; // Project byte to bit
 //        cout << (int)choice_bits[i] << endl;
     }
-    printN(choice_bits);
 //    cout << "Choice bits" << endl;
 //    printN(choice_bits);
 }
@@ -144,6 +141,7 @@ void ReceiverOT<T,pwr>::checkHashes() {
 template<class T, int pwr>
 void ReceiverOT<T,pwr>::runInitialize() {
     cout << "---- Running base OT ----" << endl;
+    generateChoiceBitsOT();
     run_baseOT(choice_bits, CONST_k, CONST_k);
 }
 

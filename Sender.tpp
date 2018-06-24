@@ -30,8 +30,13 @@ void SenderOT<T,pwr>::sampleCorrelation() {
     int length = CONST_n + CONST_k_;
     int size = (pwr * length)/8;
     vector<byte> buffer(size);
-    memcpy(&buffer[0], prg->getPRGBytesEX(size), size);
+//    memcpy(&buffer[0], prg->getPRGBytesEX(size), size);
+
+    prg->getBytes(buffer.data(), size);
     this->correlation = vZ2k<T,pwr>(vectorConversion(buffer,length,pwr/8)); // Double copy
+
+//    cout << "Correlation" << endl;
+//    vZ2k<T, pwr>::printVector(this->correlation);
 }
 
 template<class T, int pwr>

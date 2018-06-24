@@ -23,13 +23,16 @@ private:
 
 public:
     PartyOT(int id)
-            : id(id), prg(new PrgFromOpenSSLAES()), prg1(new COTSK_Prg()), prf(new OpenSSLAES()), hash(new SHA256_CTX) {
+            : id(id), prg(new COTSK_Prg()), prf(new OpenSSLAES()), hash(new SHA256_CTX) {
         // Sets the channel
         createChannel();
 
-        SecretKey secretKey0 = prg->generateKey(256); // Sets the key for the PRG
-        prg->setKey(secretKey0);
+//        SecretKey secretKey0 = prg->generateKey(256); // Sets the key for the PRG
+//        prg->setKey(secretKey0);
 
+        byte seed_key[16];
+        RAND_bytes(seed_key, sizeof(seed_key));
+        prg->init(seed_key, 100000 * 8);
 
     }
 
@@ -41,8 +44,7 @@ public:
 
 
 protected:
-    PrgFromOpenSSLAES * prg;
-    COTSK_Prg * prg1;
+    COTSK_Prg * prg;
     PseudorandomFunction * prf;
     SHA256_CTX * hash;
 
@@ -52,9 +54,7 @@ template<class T, int pwr>
 class ReceiverOT : public PartyOT{
 public:
     ReceiverOT() : PartyOT(1), choice_bits(CONST_k), t(CONST_k,vZ2k<T,pwr>(CONST_n + CONST_k_)),
-                   ui(CONST_k,vZ2k<T,pwr>(CONST_n + CONST_k_)), ai(CONST_k,vZ2k<T,pwr>(CONST_n + CONST_k_))  {
-        generateChoiceBitsOT();
-    }
+                   ui(CONST_k,vZ2k<T,pwr>(CONST_n + CONST_k_)), ai(CONST_k,vZ2k<T,pwr>(CONST_n + CONST_k_)){};
 
     vector<byte> choice_bits;// Holds the receiver's choice bits for the OTs
     void run_baseOT(vector<byte> sigma, int nOT, int elementSize);
