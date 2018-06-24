@@ -1,5 +1,6 @@
 #include "Tools.hpp"
 #include "IntMod.hpp"
+#include "PRG.cpp" //TODO: generate header file
 
 /*struct data_t
 {
@@ -22,12 +23,14 @@ private:
 
 public:
     PartyOT(int id)
-            : id(id), prg(new PrgFromOpenSSLAES()), prf(new OpenSSLAES()), hash(new SHA256_CTX) {
+            : id(id), prg(new PrgFromOpenSSLAES()), prg1(new COTSK_Prg()), prf(new OpenSSLAES()), hash(new SHA256_CTX) {
         // Sets the channel
         createChannel();
 
         SecretKey secretKey0 = prg->generateKey(256); // Sets the key for the PRG
         prg->setKey(secretKey0);
+
+
     }
 
     int getID() { return id; }
@@ -39,6 +42,7 @@ public:
 
 protected:
     PrgFromOpenSSLAES * prg;
+    COTSK_Prg * prg1;
     PseudorandomFunction * prf;
     SHA256_CTX * hash;
 

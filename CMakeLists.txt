@@ -11,7 +11,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mavx -maes -mpclmul -O3")
 
 link_directories(/usr/ssl/lib/ $ENV{HOME}/libscapi/install/lib)
 
-add_executable(OT1 main.cpp OT.cpp IntMod.tpp Tools.cpp)
+add_executable(OT1 main.cpp OT.cpp IntMod.tpp Tools.cpp PRG.cpp)
 
 TARGET_LINK_LIBRARIES(OT1 $ENV{HOME}/libscapi/libscapi.a
         OTExtensionBristol libsimpleot.a
