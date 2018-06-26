@@ -1,5 +1,5 @@
-#include "OT.hpp"
-#include "IntMod.hpp"
+#include <corrOT/OT.hpp>
+#include <corrOT/IntMod.hpp>
 
 int main() {
     assert (sizeof(Z2k<CONST_T,CONST_pwr>) == sizeof(CONST_T));
@@ -62,8 +62,8 @@ int main() {
 
     /// TESTS
 
-    // Test numbers
-/*    int a = 10;
+/*    // Test numbers
+    int a = 10;
     int b = 20;
     auto number1 = new Z2k<int, 32>(a);
     auto number2 = new Z2k<int, 32>(b);
