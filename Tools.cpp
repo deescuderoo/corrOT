@@ -40,55 +40,6 @@ vector<byte> inToBytes(int paramInt)
 
 }
 
-vector<byte> prfCall0()
-{
-    PseudorandomFunction *prf = new OpenSSLAES();
-    int outputLength = (CONST_pwr * (CONST_n + CONST_k_))/8;
-    int keySize = 128;
-    SecretKey secretkey  = prf->generateKey(keySize);
-
-//    SecretKey secretkey(key,"AES");
-
-    vector<byte> output(outputLength);
-    vector<byte> in;
-
-    for(int ctr=0;ctr<outputLength/16;ctr++)
-    {
-        in = inToBytes(ctr);
-        prf->setKey(secretkey);
-
-        prf->computeBlock(in,0,in.size(),output,16*ctr);
-    }
-    //printing secret.
-    for(int i=0;i<output.size();i++)
-        cout<<hex<<(int)output[i];
-    cout<<endl;
-
-    return output;
-}
-/// Writes (F_k(0), ... ,F_k(c)) into output, where c is such that this vector has length outputBytesLength
-/// (it has to be divisible by 16)
-void prfCall(PseudorandomFunction *prf, vector<byte> &key, vector<byte> &output, int outputBytesLength)
-{
-    output.resize(outputBytesLength);
-//    outputBytesLength = (CONST_pwr * (CONST_n + CONST_k_))/8;
-//    int keySize = 128;
-//    SecretKey secretkey  = prf->generateKey(keySize);
-    SecretKey secretkey(key,"AES");
-    prf->setKey(secretkey);
-
-    vector<byte> in;
-
-    for(int ctr=0; ctr < outputBytesLength/16; ctr++) // The output of AES is 16 bytes long
-    {
-        in = inToBytes(ctr);
-        prf->computeBlock(in, 0, in.size(), output, 16*ctr);
-    }
-/*    for(int i=0;i<output.size();i++)
-        cout<<hex<<(int)output[i];
-    cout<<endl;*/
-}
-
 void Hash_value(SHA256_CTX * hashAlgorithm, byte* in, byte * digest, int inSize){
     SHA256_Init(hashAlgorithm);
     SHA256_Update(hashAlgorithm, in, inSize);

@@ -1,9 +1,12 @@
 template<class T, int pwr>
 void ReceiverOT<T,pwr>::generateChoiceBitsOT() {
     size_t size = choice_bits.size();
-    memcpy(&choice_bits[0], prg->getPRGBytesEX(size), size);
+//    memcpy(&choice_bits[0], prg->getPRGBytesEX(size), size);
+
+    prg->getBytes(&choice_bits[0], CONST_k);
+
     for (unsigned char &choice_bit : choice_bits) {
-        choice_bit %= 2; // Project byte to bit
+        choice_bit %= 2; // Map byte to bit
 //        cout << (int)choice_bits[i] << endl;
     }
 //    cout << "Choice bits" << endl;
@@ -34,7 +37,10 @@ void ReceiverOT<T,pwr>::applyPRF() {
     for (int i = 0; i < CONST_k; i++) {
         int sizeBytes = (CONST_pwr * (CONST_n + CONST_k_))/8;
         vector<byte> tmp(sizeBytes);
-        prfCall(prf, keys_bOT[i], tmp, sizeBytes);
+
+        prf->init(keys_bOT[i].data(), sizeBytes);
+//        prfCall(prf, keys_bOT[i], tmp, sizeBytes);
+        prf->getBytes(tmp.data(), sizeBytes);
         t[i] = vZ2k<T,pwr>(vectorConversion(tmp, CONST_n + CONST_k_, pwr/8));
     }
 }
@@ -138,6 +144,7 @@ void ReceiverOT<T,pwr>::checkHashes() {
 template<class T, int pwr>
 void ReceiverOT<T,pwr>::runInitialize() {
     cout << "---- Running base OT ----" << endl;
+    generateChoiceBitsOT();
     run_baseOT(choice_bits, CONST_k, CONST_k);
 }
 
