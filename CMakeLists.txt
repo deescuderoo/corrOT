@@ -22,7 +22,7 @@ configure_file(Tools.hpp.in include/Tools.hpp)
 
 link_directories(/usr/ssl/lib/ $ENV{HOME}/libscapi/install/lib)
 
-add_library(corrOT ${PROJECT_SOURCE_DIR}/src/OT.cpp include/IntMod.hpp ${PROJECT_SOURCE_DIR}/src/Tools.cpp ${PROJECT_SOURCE_DIR}/src/PRG.cpp)
+add_library(corrOT ${PROJECT_SOURCE_DIR}/src/OT.cpp include/IntMod.hpp ${PROJECT_SOURCE_DIR}/src/Tools.cpp ${PROJECT_SOURCE_DIR}/src/PRG.cpp ${PROJECT_SOURCE_DIR}/src/Communication/Comm.cpp)
 add_executable(testOT test/test.cpp)
 
 TARGET_LINK_LIBRARIES(corrOT $ENV{HOME}/libscapi/libscapi.a

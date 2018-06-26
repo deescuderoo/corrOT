@@ -1,12 +1,13 @@
-#include "Tools.hpp"
-#include "IntMod.hpp"
-#include "PRG.hpp"
+#include <Tools.hpp>
+#include <IntMod.hpp>
+#include <PRG.hpp>
+#include <Communication/Comm.hpp>
+#include <libscapi/include/interactive_mid_protocols/OTExtensionBristol.hpp>
 
 /**
  * Base Party class from which Sender and Receiver class are derived.
  * Contains the Party information such as channel, party Id etc.
  */
-
 class PartyOT {
 private:
 

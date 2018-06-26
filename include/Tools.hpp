@@ -21,10 +21,14 @@
 #define HASH_OUTPUT_LENGTH 32
 
 typedef unsigned int CONST_T;
+typedef unsigned char byte;
 
 #include <iostream>
-#include <libscapi/include/interactive_mid_protocols/OTExtensionBristol.hpp>
-#include <libscapi/lib/openssl/crypto/sha/sha.h>
+#include <openssl/sha.h>
+#include <vector>
+#include <cassert>
+#include <algorithm>
+using namespace std;
 
 void printN (byte * bytes, int N);
 void printN (vector<byte> & bytes);
