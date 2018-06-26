@@ -1,4 +1,4 @@
-#include "OT.hpp"
+#include <OT.hpp>
 
 void PartyOT::createChannel(){
     if(id == 0)

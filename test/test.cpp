@@ -1,5 +1,5 @@
-#include <corrOT/OT.hpp>
-#include <corrOT/IntMod.hpp>
+#include <OT.hpp>
+#include <IntMod.hpp>
 
 int main() {
     assert (sizeof(Z2k<CONST_T,CONST_pwr>) == sizeof(CONST_T));

@@ -9,6 +9,7 @@
 #include <iostream>
 #include <iomanip> //setfill
 #include <cassert>
+#include <PRG.hpp>
 
 using namespace std;
 
@@ -23,16 +24,12 @@ inline void print128(char *str, const byte * b) {
     cout << dec << endl;
 }
 
-class COTSK_Prg {
-
-   public:
-
-      ~COTSK_Prg() {
+COTSK_Prg::~COTSK_Prg() {
          _mm_free(_buff);
          _mm_free(_ctr);
       }
 
-      COTSK_Prg() {
+COTSK_Prg::COTSK_Prg() {
          int maxBytes = 100000 * 8;
          assert (maxBytes % 16 == 0);
          _ctr_inc = 1;
@@ -46,7 +43,7 @@ class COTSK_Prg {
          _ctr_u64 = (uint64_t *) _ctr;
          }
 
-      void init(const byte *key128bit , uint32_t maxBytes) {
+void COTSK_Prg::init(const byte *key128bit , uint32_t maxBytes) {
 
          if (_aes != nullptr) {
             EVP_CIPHER_CTX_init(_aes);
@@ -63,15 +60,14 @@ class COTSK_Prg {
 
       }
 
-      const byte *getBytes(uint32_t sizeBytes) {
+const byte * COTSK_Prg::getBytes(uint32_t sizeBytes) {
          return doGetBytes (_buff,sizeBytes);
       }
-        const byte *getBytes(byte *client_buff, uint32_t sizeBytes) {
+const byte * COTSK_Prg::getBytes(byte *client_buff, uint32_t sizeBytes) {
             return doGetBytes (client_buff,sizeBytes);
         }
 
-private:
-      const byte *doGetBytes(byte *buffer, uint32_t sizeBytes) {
+const byte * COTSK_Prg::doGetBytes(byte *buffer, uint32_t sizeBytes) {
          for (uint32_t i = 0; i < (sizeBytes/16)+1; i++) {
              _ctr_u64[2*i] = (++_ctr_inc);
          }
@@ -85,14 +81,5 @@ private:
          return buffer;
       }
 
-   private:
-      byte *      _buff = nullptr;
-      byte *      _ctr = nullptr;
-      uint64_t *  _ctr_u64 = nullptr;
-      byte        _key[16];
-      uint64_t    _ctr_inc;
-      EVP_CIPHER_CTX *_aes = nullptr;
-      byte       _iv[16];
 
-};
 

@@ -6,8 +6,6 @@
 #define OT1_INTMOD_HPP
 
 #include <iostream>
-#include <libscapi/include/interactive_mid_protocols/OTExtensionBristol.hpp>
-#include <libscapi/include/primitives/Prg.hpp>
 
 template <class T, int pwr>
 class vZ2k;
@@ -99,6 +97,6 @@ public:
 
 };
 
-#include "IntMod.tpp"
+#include "corrOT/src/IntMod.tpp"
 
 #endif //OT1_INTMOD_HPP

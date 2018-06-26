@@ -2,7 +2,7 @@
 // Created by daniel on 19/06/18.
 //
 
-#include "Tools.hpp"
+#include <Tools.hpp>
 
 void printN (byte * bytes, int N) {
     cout << hex;
