@@ -54,7 +54,7 @@ cd usr/local/boost_1_67_0/
 Then download and build the corrOT library
 
 ```
-git clone https://github.com/deescuderoo/corrOT.git
+git clone --recurse-submodules https://github.com/deescuderoo/corrOT.git
 cd corrOT
 cmake -H. -Bbuild
 cd build
