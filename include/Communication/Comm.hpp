@@ -27,6 +27,9 @@
 
 #pragma once
 
+#ifndef COMM_HPP
+#define COMM_HPP
+
 #include <boost/asio.hpp>
 #include <boost/system/error_code.hpp>
 #include <boost/bind.hpp>
@@ -182,3 +185,5 @@ private:
 
 
 };
+
+#endif //COMM_HPP
